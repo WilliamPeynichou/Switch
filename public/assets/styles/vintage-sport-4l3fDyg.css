@@ -1,0 +1,382 @@
+/* Thème Sport Vintage - Switch Game */
+
+/* Variables CSS pour le thème vintage */
+:root {
+    --vintage-orange: #FF6B35;
+    --vintage-red: #D32F2F;
+    --vintage-blue: #1976D2;
+    --vintage-yellow: #FFD700;
+    --vintage-brown: #8D6E63;
+    --vintage-cream: #FFF8E1;
+    --vintage-dark: #2C1810;
+    --vintage-light: #F5F5DC;
+    --vintage-gold: #B8860B;
+}
+
+/* Reset et base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial Black', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--vintage-cream) 0%, var(--vintage-light) 100%);
+    color: var(--vintage-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    background: var(--vintage-dark);
+    padding: 1rem 0;
+    border-bottom: 4px solid var(--vintage-orange);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--vintage-orange);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 0px var(--vintage-dark);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-menu a {
+    color: var(--vintage-light);
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: var(--vintage-orange);
+    border-color: var(--vintage-orange);
+    background: var(--vintage-dark);
+}
+
+/* Footer */
+.footer {
+    background: var(--vintage-dark);
+    color: var(--vintage-light);
+    padding: 2rem 0;
+    border-top: 4px solid var(--vintage-blue);
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    color: var(--vintage-orange);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.footer-section p,
+.footer-section a {
+    color: var(--vintage-light);
+    text-decoration: none;
+    line-height: 1.6;
+}
+
+.footer-section a:hover {
+    color: var(--vintage-orange);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--vintage-brown);
+    color: var(--vintage-brown);
+}
+
+/* Section Hero */
+.hero-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    background: 
+        radial-gradient(circle at 20% 80%, var(--vintage-orange) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, var(--vintage-blue) 0%, transparent 50%),
+        linear-gradient(135deg, var(--vintage-cream) 0%, var(--vintage-light) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23000" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23000" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23000" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="%23000" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="%23000" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+}
+
+.vintage-text {
+    display: block;
+    color: var(--vintage-orange);
+    text-shadow: 3px 3px 0px var(--vintage-dark);
+    transform: rotate(-2deg);
+    animation: vintageGlow 2s ease-in-out infinite alternate;
+}
+
+.sport-text {
+    display: block;
+    color: var(--vintage-blue);
+    text-shadow: 3px 3px 0px var(--vintage-dark);
+    transform: rotate(1deg);
+    animation: sportPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes vintageGlow {
+    0% { text-shadow: 3px 3px 0px var(--vintage-dark), 0 0 20px var(--vintage-orange); }
+    100% { text-shadow: 3px 3px 0px var(--vintage-dark), 0 0 30px var(--vintage-orange); }
+}
+
+@keyframes sportPulse {
+    0% { text-shadow: 3px 3px 0px var(--vintage-dark), 0 0 20px var(--vintage-blue); }
+    100% { text-shadow: 3px 3px 0px var(--vintage-dark), 0 0 30px var(--vintage-blue); }
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    color: var(--vintage-brown);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Boutons vintage */
+.btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 3px solid;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.1em;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--vintage-orange);
+    color: white;
+    border-color: var(--vintage-dark);
+    box-shadow: 5px 5px 0px var(--vintage-dark);
+}
+
+.btn-primary:hover {
+    background: var(--vintage-red);
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px var(--vintage-dark);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--vintage-blue);
+    border-color: var(--vintage-blue);
+    box-shadow: 5px 5px 0px var(--vintage-blue);
+}
+
+.btn-secondary:hover {
+    background: var(--vintage-blue);
+    color: white;
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px var(--vintage-dark);
+}
+
+/* Section Features */
+.features-section {
+    padding: 80px 0;
+    background: var(--vintage-light);
+    position: relative;
+}
+
+.features-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--vintage-orange), var(--vintage-blue), var(--vintage-orange));
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border: 3px solid var(--vintage-dark);
+    border-radius: 0;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 8px 8px 0px var(--vintage-dark);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, var(--vintage-orange), var(--vintage-blue));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 13px 13px 0px var(--vintage-dark);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    color: var(--vintage-dark);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.feature-card p {
+    color: var(--vintage-brown);
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}

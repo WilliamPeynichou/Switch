@@ -1,0 +1,14 @@
+[
+    "\/assets\/bootstrap.js",
+    "\/assets\/styles\/responsive.css",
+    "\/assets\/styles\/components.css",
+    "\/assets\/styles\/animations.css",
+    "\/assets\/styles\/utilities.css",
+    "\/assets\/styles\/auth.css",
+    "@symfony\/stimulus-bundle",
+    "@hotwired\/stimulus",
+    "\/assets\/@symfony\/stimulus-bundle\/controllers.js",
+    "\/assets\/@symfony\/ux-turbo\/turbo_controller.js",
+    "\/assets\/controllers\/hello_controller.js",
+    "@hotwired\/turbo"
+]

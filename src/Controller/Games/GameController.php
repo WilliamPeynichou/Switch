@@ -49,7 +49,7 @@ class GameController extends AbstractController
             }
         }
 
-        return $this->render('frontend/home/index.html.twig', [
+        return $this->render('frontend/home/index_new.html.twig', [
             'games' => $games,
             'difficulties' => $difficulties,
             'popularGames' => $popularGames

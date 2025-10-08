@@ -1,15 +1,10 @@
 {
     "controllers": {
-        "@symfony/ux-turbo": {
-            "turbo-core": {
-                "enabled": true,
-                "fetch": "eager"
-            },
-            "mercure-turbo-stream": {
-                "enabled": false,
-                "fetch": "eager"
-            }
+        "hello": {
+            "main": "hello_controller.js"
+        },
+        "csrf_protection": {
+            "main": "csrf_protection_controller.js"
         }
-    },
-    "entrypoints": []
+    }
 }

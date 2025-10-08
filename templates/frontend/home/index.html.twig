@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur Switch{% endblock %}
+
+{% block body %}
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="vintage-text">BIENVENUE</span>
+                <span class="sport-text">SUR SWITCH</span>
+            </h1>
+            <p class="hero-subtitle">L'expérience sportive vintage qui vous transporte</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Commencer</a>
+                <a href="#" class="btn btn-secondary">Découvrir</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Compétitions</h3>
+                <p>Participez aux tournois les plus prestigieux</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚽</div>
+                <h3>Sports</h3>
+                <p>Découvrez une variété de disciplines sportives</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Performance</h3>
+                <p>Suivez vos progrès et améliorez vos performances</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

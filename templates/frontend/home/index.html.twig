@@ -3,14 +3,12 @@
 {% block title %}Bienvenue sur Switch{% endblock %}
 
 {% block body %}
-<div class="hero-section">
+<!-- Hero Section Moderne -->
+<div class="hero">
     <div class="container">
         <div class="hero-content">
-            <h1 class="hero-title">
-                <span class="vintage-text">BIENVENUE</span>
-                <span class="sport-text">SUR SWITCH</span>
-            </h1>
-            <p class="hero-subtitle">L'expérience sportive vintage qui vous transporte</p>
+            <h1>BIENVENUE SUR SWITCH</h1>
+            <p>L'expérience sportive vintage qui vous transporte dans l'univers du basketball avec style et modernité</p>
             <div class="hero-buttons">
                 <a href="#games-section" class="btn btn-primary">Découvrir les jeux</a>
                 <a href="#popular-section" class="btn btn-secondary">Jeux populaires</a>
@@ -21,136 +19,233 @@
 
 <!-- Section des jeux populaires -->
 {% if popularGames is defined and popularGames is not empty %}
-<div id="popular-section" class="popular-games-section">
+<section id="popular-section" class="section">
     <div class="container">
-        <h2 class="section-title">
-            <span class="title-icon">🔥</span>
-            Jeux Populaires
-        </h2>
-        <div class="popular-games-grid">
+        <h2 class="section-title">🔥 Jeux Populaires</h2>
+        <div class="games-grid">
             {% for game in popularGames %}
-                <div class="popular-game-card">
-                    <div class="game-image">
-                        <div class="game-placeholder">🏀</div>
-                    </div>
-                    <div class="game-info">
-                        <h3>{{ game.name ?? 'Jeu' }}</h3>
-                        <p>{{ game.description ?? 'Description du jeu' }}</p>
-                        <div class="game-stats">
-                            <span class="stat">
-                                <i class="icon">👥</i>
-                                {{ game.minPlayers ?? 1 }}-{{ game.maxPlayers ?? 4 }} joueurs
-                            </span>
-                            <span class="stat">
-                                <i class="icon">⏱️</i>
-                                {{ game.defaultDurationMinutes ?? 30 }} min
-                            </span>
+                <div class="game-card animate-fadeInUp">
+                    <div class="game-header">
+                        <div class="game-badge">
+                            <span class="badge badge-primary">Officiel</span>
                         </div>
-                        <a href="#games-section" class="btn btn-small">Jouer</a>
+                        <h3 class="game-title">
+                            <span class="game-icon">🏀</span>
+                            {{ game.name|default('Jeu de Basketball') }}
+                        </h3>
+                        <p class="game-description">{{ game.description|default('Description du jeu de basketball vintage.') }}</p>
+                    </div>
+                    <div class="game-stats">
+                        <div class="stat">
+                            <span class="stat-icon">👥</span>
+                            <span>{{ game.minPlayers|default(2) }}-{{ game.maxPlayers|default(8) }} joueurs</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-icon">⏱️</span>
+                            <span>{{ game.defaultDurationMinutes|default(30) }} min</span>
+                        </div>
+                    </div>
+                    <div class="game-actions">
+                        <a href="{{ path('app_game_show', {id: game.id|default(1)}) }}" class="btn-play">Jouer</a>
+                        <a href="{{ path('app_game_show', {id: game.id|default(1)}) }}" class="btn-details">Détails</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-</div>
+</section>
 {% endif %}
 
-<!-- Section principale des jeux -->
-<div id="games-section" class="games-section">
+<!-- Section principale des jeux avec scroll -->
+<section id="games-section" class="section">
     <div class="container">
-        <h2 class="section-title">
-            <span class="title-icon">🎮</span>
-            Tous les Jeux
-        </h2>
+        <h2 class="section-title">🎮 Tous les Jeux</h2>
         
-        <!-- Filtres -->
-        <div class="games-filters">
-            <div class="filter-group">
-                <label for="difficulty-filter">Difficulté :</label>
-                <select id="difficulty-filter" class="filter-select">
-                    <option value="">Toutes</option>
-                    {% for difficulty in difficulties %}
-                        <option value="{{ difficulty.id }}">{{ difficulty.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="type-filter">Type :</label>
-                <select id="type-filter" class="filter-select">
-                    <option value="">Tous</option>
-                    <option value="position_based">Par positions</option>
-                    <option value="score_based">Par score</option>
-                    <option value="time_based">Chronométré</option>
-                </select>
+        <!-- Filtres modernes -->
+        <div class="filters-section">
+            <h3 class="filters-title">Filtrer les jeux</h3>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="difficulty-filter" class="filter-label">Difficulté</label>
+                    <select id="difficulty-filter" class="filter-select">
+                        <option value="">Toutes les difficultés</option>
+                        {% for difficulty in difficulties %}
+                            <option value="{{ difficulty.id }}">{{ difficulty.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="type-filter" class="filter-label">Type de jeu</label>
+                    <select id="type-filter" class="filter-select">
+                        <option value="">Tous les types</option>
+                        <option value="official">Officiels</option>
+                        <option value="custom">Personnalisés</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="players-filter" class="filter-label">Nombre de joueurs</label>
+                    <select id="players-filter" class="filter-select">
+                        <option value="">Tous</option>
+                        <option value="1-2">1-2 joueurs</option>
+                        <option value="3-4">3-4 joueurs</option>
+                        <option value="5+">5+ joueurs</option>
+                    </select>
+                </div>
             </div>
         </div>
-
-        <!-- Grille des jeux avec scroll -->
+        
+        <!-- Container de scroll pour les jeux -->
         <div class="games-scroll-container">
             <div class="games-grid">
-                {% if games is defined and games is not empty %}
-                    {% for game in games %}
-                        <div class="game-card" 
-                             data-difficulty=""
-                             data-type="{{ game.gameType ?? 'position_based' }}">
-                            <div class="game-header">
-                                <div class="game-image">
-                                    <div class="game-placeholder">🏀</div>
-                                </div>
-                                <div class="game-badge">
-                                    {% if game.isOfficial ?? false %}
-                                        <span class="badge official">Officiel</span>
-                                    {% else %}
-                                        <span class="badge custom">Personnalisé</span>
-                                    {% endif %}
-                                </div>
+                {% for game in games %}
+                    <div class="game-card animate-fadeInUp" 
+                         data-difficulty="{{ game.difficulty.id|default('') }}" 
+                         data-type="{{ game.isOfficial|default(false) ? 'official' : 'custom' }}"
+                         data-players="{{ game.minPlayers|default(1) }}-{{ game.maxPlayers|default(4) }}">
+                        <div class="game-header">
+                            <div class="game-badge">
+                                {% if game.isOfficial|default(false) %}
+                                    <span class="badge badge-primary">Officiel</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">Personnalisé</span>
+                                {% endif %}
                             </div>
-                            
-                            <div class="game-content">
-                                <h3 class="game-title">{{ game.name ?? 'Jeu' }}</h3>
-                                <p class="game-description">{{ game.description ?? 'Description du jeu' }}</p>
-                                
-                                <div class="game-rules">
-                                    <h4>Règles :</h4>
-                                    <p>{{ (game.baseRules ?? 'Règles du jeu')|slice(0, 150) }}{% if (game.baseRules ?? '')|length > 150 %}...{% endif %}</p>
-                                </div>
-                                
-                                <div class="game-stats">
-                                    <div class="stat">
-                                        <i class="icon">👥</i>
-                                        <span>{{ game.minPlayers ?? 1 }}-{{ game.maxPlayers ?? 4 }} joueurs</span>
-                                    </div>
-                                    <div class="stat">
-                                        <i class="icon">⏱️</i>
-                                        <span>{{ game.defaultDurationMinutes ?? 30 }} min</span>
-                                    </div>
-                                    <div class="stat">
-                                        <i class="icon">🎯</i>
-                                        <span>{{ (game.gameType ?? 'position_based')|replace({'_': ' '})|title }}</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="game-actions">
-                                    <a href="{{ path('app_game_show', {id: game.id ?? 1}) }}" class="btn btn-primary">
-                                        <i class="icon">▶️</i>
-                                        Jouer
-                                    </a>
-                                    <a href="{{ path('app_game_show', {id: game.id ?? 1}) }}" class="btn btn-secondary">
-                                        <i class="icon">ℹ️</i>
-                                        Détails
-                                    </a>
-                                </div>
+                            <h3 class="game-title">
+                                <span class="game-icon">🏀</span>
+                                {{ game.name|default('Jeu de Basketball') }}
+                            </h3>
+                            <p class="game-description">{{ game.description|default('Description du jeu de basketball vintage.') }}</p>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat">
+                                <span class="stat-icon">👥</span>
+                                <span>{{ game.minPlayers|default(2) }}-{{ game.maxPlayers|default(8) }} joueurs</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-icon">⏱️</span>
+                                <span>{{ game.defaultDurationMinutes|default(30) }} min</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-icon">🎯</span>
+                                <span>{{ game.difficulty.name|default('Moyen') }}</span>
                             </div>
                         </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="no-games">
-                        <p>Aucun jeu disponible pour le moment.</p>
+                        <div class="game-actions">
+                            <a href="{{ path('app_game_show', {id: game.id|default(1)}) }}" class="btn-play">Jouer</a>
+                            <a href="{{ path('app_game_show', {id: game.id|default(1)}) }}" class="btn-details">Détails</a>
+                        </div>
                     </div>
-                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
-</div>
+</section>
 
+<!-- Section statistiques -->
+<section class="section" style="background: var(--gray-100);">
+    <div class="container">
+        <h2 class="section-title">📊 Statistiques</h2>
+        <div class="games-grid">
+            <div class="game-card text-center">
+                <div class="game-header">
+                    <h3 class="game-title">
+                        <span class="game-icon">🎮</span>
+                        Jeux Disponibles
+                    </h3>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-icon">📈</span>
+                        <span>{{ games is defined and games ? games|length : 4 }} jeux</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-card text-center">
+                <div class="game-header">
+                    <h3 class="game-title">
+                        <span class="game-icon">👥</span>
+                        Joueurs Actifs
+                    </h3>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-icon">🔥</span>
+                        <span>Communauté active</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-card text-center">
+                <div class="game-header">
+                    <h3 class="game-title">
+                        <span class="game-icon">🏆</span>
+                        Tournois
+                    </h3>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-icon">⚡</span>
+                        <span>Compétitions régulières</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Filtrage des jeux avec JavaScript moderne
+document.addEventListener('DOMContentLoaded', function() {
+    const difficultyFilter = document.getElementById('difficulty-filter');
+    const typeFilter = document.getElementById('type-filter');
+    const playersFilter = document.getElementById('players-filter');
+    const gameCards = document.querySelectorAll('.game-card[data-difficulty]');
+
+    function filterGames() {
+        const selectedDifficulty = difficultyFilter.value;
+        const selectedType = typeFilter.value;
+        const selectedPlayers = playersFilter.value;
+
+        gameCards.forEach(card => {
+            const cardDifficulty = card.getAttribute('data-difficulty');
+            const cardType = card.getAttribute('data-type');
+            const cardPlayers = card.getAttribute('data-players');
+            
+            let showCard = true;
+
+            if (selectedDifficulty && cardDifficulty !== selectedDifficulty) {
+                showCard = false;
+            }
+
+            if (selectedType && cardType !== selectedType) {
+                showCard = false;
+            }
+
+            if (selectedPlayers) {
+                const [min, max] = selectedPlayers.split('-');
+                const [cardMin, cardMax] = cardPlayers.split('-');
+                if (selectedPlayers === '5+') {
+                    if (parseInt(cardMax) < 5) showCard = false;
+                } else {
+                    if (parseInt(cardMax) < parseInt(min) || parseInt(cardMin) > parseInt(max)) {
+                        showCard = false;
+                    }
+                }
+            }
+
+            if (showCard) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeInUp 0.3s ease-out';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    if (difficultyFilter) difficultyFilter.addEventListener('change', filterGames);
+    if (typeFilter) typeFilter.addEventListener('change', filterGames);
+    if (playersFilter) playersFilter.addEventListener('change', filterGames);
+});
+</script>
 {% endblock %}

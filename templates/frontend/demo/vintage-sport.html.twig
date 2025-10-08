@@ -1,0 +1,212 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Direction Artistique Vintage/Sport/Moderne - Switch Game{% endblock %}
+
+{% block body %}
+<!-- Hero Section Vintage Sport -->
+<div class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="animate-vintageGlow">SWITCH GAME</h1>
+            <p>Direction artistique sport et vintage</p>
+            <div class="hero-buttons">
+                <a href="#components" class="btn btn-primary">Composants</a>
+                <a href="#colors" class="btn btn-secondary">Palette</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Palette de couleurs vintage -->
+<section id="colors" class="section">
+    <div class="container">
+        <h2 class="section-title">Palette Vintage/Sport/Moderne</h2>
+        <div class="grid grid-4">
+            <div class="card animate-fadeInUp">
+                <div class="card-header">
+                    <h3>Marron Vintage</h3>
+                </div>
+                <div class="card-content">
+                    <div class="color-swatch" style="background: var(--vintage-marron); height: 60px; border: 2px solid var(--vintage-marron);"></div>
+                    <p><strong>#8B4513</strong></p>
+                    <p>Couleur principale vintage</p>
+                </div>
+            </div>
+            
+            <div class="card animate-fadeInUp">
+                <div class="card-header">
+                    <h3>Crème Vintage</h3>
+                </div>
+                <div class="card-content">
+                    <div class="color-swatch" style="background: var(--vintage-cream); height: 60px; border: 2px solid var(--vintage-marron);"></div>
+                    <p><strong>#F5F5DC</strong></p>
+                    <p>Fond doux et élégant</p>
+                </div>
+            </div>
+            
+            <div class="card animate-fadeInUp">
+                <div class="card-header">
+                    <h3>Orange Sport</h3>
+                </div>
+                <div class="card-content">
+                    <div class="color-swatch" style="background: var(--vintage-orange); height: 60px; border: 2px solid var(--vintage-marron);"></div>
+                    <p><strong>#FF6B35</strong></p>
+                    <p>Énergie et dynamisme</p>
+                </div>
+            </div>
+            
+            <div class="card animate-fadeInUp">
+                <div class="card-header">
+                    <h3>Bleu Électrique</h3>
+                </div>
+                <div class="card-content">
+                    <div class="color-swatch" style="background: var(--vintage-blue-electric); height: 60px; border: 2px solid var(--vintage-marron);"></div>
+                    <p><strong>#00BFFF</strong></p>
+                    <p>Modernité et innovation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Composants vintage -->
+<section id="components" class="section" style="background: var(--vintage-cream);">
+    <div class="container">
+        <h2 class="section-title">Composants Vintage Sport</h2>
+        
+        <!-- Boutons vintage -->
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Boutons Vintage</h3>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <button class="btn btn-primary">Bouton Principal</button>
+                        <button class="btn btn-secondary">Bouton Secondaire</button>
+                        <button class="btn btn-outline">Bouton Outline</button>
+                    </div>
+                    <p>Boutons avec effet vintage et ombres portées</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Badges Sport</h3>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <span class="badge badge-primary">Officiel</span>
+                        <span class="badge badge-secondary">Sport</span>
+                        <span class="badge badge-success">Actif</span>
+                        <span class="badge badge-warning">Attention</span>
+                    </div>
+                    <p>Badges avec style vintage sport</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Formulaires vintage -->
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Formulaires Vintage</h3>
+                </div>
+                <div class="card-content">
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">Nom du joueur</label>
+                            <input type="text" class="form-control" placeholder="Entrez votre nom">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Niveau de difficulté</label>
+                            <select class="form-control">
+                                <option>Débutant</option>
+                                <option>Intermédiaire</option>
+                                <option>Expert</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Commencer</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Typographie Sport</h3>
+                </div>
+                <div class="card-content">
+                    <h1 style="font-family: var(--font-sport); color: var(--vintage-orange);">TITRE SPORT</h1>
+                    <h2 style="font-family: var(--font-primary); color: var(--vintage-blue-electric);">Sous-titre Moderne</h2>
+                    <p style="color: var(--vintage-marron);">Texte normal avec la palette vintage moderne</p>
+                    <p class="text-vintage-orange">Texte orange sport</p>
+                    <p class="text-vintage-blue">Texte bleu électrique</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Animations vintage -->
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Animations Vintage</h2>
+        <div class="grid grid-3">
+            <div class="card animate-fadeInUp">
+                <div class="card-header">
+                    <h3>Fade In Up</h3>
+                </div>
+                <div class="card-content">
+                    <p>Animation d'apparition par le bas</p>
+                </div>
+            </div>
+            
+            <div class="card animate-slideInRight">
+                <div class="card-header">
+                    <h3>Slide In Right</h3>
+                </div>
+                <div class="card-content">
+                    <p>Animation de glissement depuis la droite</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="animate-vintageGlow">Vintage Glow</h3>
+                </div>
+                <div class="card-content">
+                    <p>Effet de lueur vintage</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer vintage -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Switch Game</h3>
+                <p>L'expérience sportive vintage qui vous transporte dans l'univers du basketball avec style.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Jeux</h3>
+                <p><a href="#">Tour du Monde</a></p>
+                <p><a href="#">HORSE</a></p>
+                <p><a href="#">Shoot-out</a></p>
+                <p><a href="#">King of the Court</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Communauté</h3>
+                <p><a href="#">Statistiques</a></p>
+                <p><a href="#">Classements</a></p>
+                <p><a href="#">Événements</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Switch Game - Direction artistique sport et vintage</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

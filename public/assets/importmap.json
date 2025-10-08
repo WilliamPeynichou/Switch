@@ -1,6 +1,6 @@
 {
     "app": {
-        "path": "\/assets\/app-FwPvwqs.js",
+        "path": "\/assets\/app-czx8z9O.js",
         "type": "js"
     },
     "\/assets\/bootstrap.js": {
@@ -23,24 +23,28 @@
         "path": "\/assets\/controllers\/csrf_protection_controller-SVp8Dit.js",
         "type": "js"
     },
+    "\/assets\/styles\/vintage-sport.css": {
+        "path": "\/assets\/styles\/vintage-sport-feMdsmc.css",
+        "type": "css"
+    },
     "\/assets\/styles\/responsive.css": {
-        "path": "\/assets\/styles\/responsive-kz-xjQQ.css",
+        "path": "\/assets\/styles\/responsive-cnL1m-o.css",
         "type": "css"
     },
     "\/assets\/styles\/components.css": {
-        "path": "\/assets\/styles\/components-T_EsLL1.css",
+        "path": "\/assets\/styles\/components-bLXdRv2.css",
         "type": "css"
     },
     "\/assets\/styles\/animations.css": {
-        "path": "\/assets\/styles\/animations-lO3athR.css",
+        "path": "\/assets\/styles\/animations-ptdwPRd.css",
         "type": "css"
     },
     "\/assets\/styles\/utilities.css": {
-        "path": "\/assets\/styles\/utilities-KT6tVss.css",
+        "path": "\/assets\/styles\/utilities-fPFLnwV.css",
         "type": "css"
     },
     "\/assets\/styles\/auth.css": {
-        "path": "\/assets\/styles\/auth-8GqqYSp.css",
+        "path": "\/assets\/styles\/auth-RYaacnM.css",
         "type": "css"
     },
     "@hotwired\/stimulus": {

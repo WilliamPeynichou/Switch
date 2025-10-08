@@ -1,4 +1,10 @@
 import './bootstrap.js';
+import './styles/vintage-sport.css';
+import './styles/responsive.css';
+import './styles/components.css';
+import './styles/animations.css';
+import './styles/utilities.css';
+import './styles/auth.css';
 /*
  * Welcome to your app's main JavaScript file!
  *

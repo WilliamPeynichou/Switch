@@ -5,42 +5,39 @@
 {% block body_class %}auth-page{% endblock %}
 
 {% block body %}
-<div class="auth-hero">
-    <div class="container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <h1 class="auth-title">
-                    <span class="title-icon">🔐</span>
-                    Connexion
-                </h1>
-                <p class="auth-subtitle">Connectez-vous à votre compte Switch Game</p>
-            </div>
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-logo">🔐 Connexion</h1>
+            <p class="auth-subtitle">Connectez-vous à votre compte Switch Game</p>
+        </div>
 
+        <div class="auth-body">
             <form method="post" class="auth-form">
                 {% if error is defined and error %}
-                    <div class="alert alert-danger">
+                    <div class="auth-alert auth-alert-danger">
                         <i class="icon">⚠️</i>
                         {{ error.messageKey|trans(error.messageData, 'security') }}
                     </div>
                 {% endif %}
 
-                <div class="form-group">
-                    <label for="inputEmail" class="form-label">Email</label>
+                <div class="auth-form-group">
+                    <label for="inputEmail" class="auth-label">Email</label>
                     <input type="email" value="{{ last_username ?? '' }}" name="email" id="inputEmail" 
-                           class="form-control" autocomplete="email" required autofocus
+                           class="auth-input" autocomplete="email" required autofocus
                            placeholder="votre@email.com">
                 </div>
 
-                <div class="form-group">
-                    <label for="inputPassword" class="form-label">Mot de passe</label>
+                <div class="auth-form-group">
+                    <label for="inputPassword" class="auth-label">Mot de passe</label>
                     <input type="password" name="password" id="inputPassword" 
-                           class="form-control" autocomplete="current-password" required
+                           class="auth-input" autocomplete="current-password" required
                            placeholder="Votre mot de passe">
                 </div>
 
-                <div class="form-check">
-                    <input type="checkbox" name="_remember_me" id="remember_me" class="form-check-input">
-                    <label for="remember_me" class="form-check-label">
+                <div class="auth-checkbox-group">
+                    <input type="checkbox" name="_remember_me" id="remember_me" class="auth-checkbox">
+                    <label for="remember_me" class="auth-checkbox-label">
                         Se souvenir de moi
                     </label>
                 </div>
@@ -59,270 +56,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block stylesheets %}
-<style>
-.auth-hero {
-    min-height: 100vh;
-    background: linear-gradient(135deg, var(--vintage-orange) 0%, var(--vintage-orange-dark) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-xl);
-    position: relative;
-    overflow: hidden;
-}
-
-.auth-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
-}
-
-.auth-card {
-    background: white;
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-xl);
-    padding: var(--space-3xl);
-    width: 100%;
-    max-width: 450px;
-    position: relative;
-    z-index: 1;
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: var(--space-2xl);
-}
-
-.auth-title {
-    font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
-    color: var(--vintage-orange);
-    margin: 0 0 var(--space-lg) 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-lg);
-    font-weight: 900;
-}
-
-.title-icon {
-    font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-}
-
-.auth-subtitle {
-    color: var(--vintage-gray);
-    margin: 0;
-    font-size: var(--text-lg);
-    line-height: 1.6;
-}
-
-.auth-form {
-    margin-bottom: var(--space-2xl);
-}
-
-.form-group {
-    margin-bottom: var(--space-lg);
-}
-
-.form-label {
-    display: block;
-    margin-bottom: var(--space-sm);
-    font-weight: 600;
-    color: var(--vintage-blue);
-    font-size: var(--text-sm);
-}
-
-.form-input {
-    width: 100%;
-    padding: var(--space-lg);
-    border: 2px solid #e9ecef;
-    border-radius: var(--radius-lg);
-    font-size: var(--text-base);
-    transition: var(--transition-fast);
-    background: white;
-    box-sizing: border-box;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--vintage-orange);
-    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-    transform: translateY(-2px);
-}
-
-.form-input:hover {
-    border-color: var(--vintage-orange-light);
-}
-
-.form-options {
-    margin-bottom: var(--space-2xl);
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    cursor: pointer;
-    font-size: var(--text-sm);
-    color: var(--vintage-gray);
-    transition: var(--transition-fast);
-}
-
-.checkbox-label:hover {
-    color: var(--vintage-orange);
-}
-
-.checkbox-label input[type="checkbox"] {
-    display: none;
-}
-
-.checkmark {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e9ecef;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition-fast);
-    background: white;
-}
-
-.checkbox-label input[type="checkbox"]:checked + .checkmark {
-    background: var(--vintage-orange);
-    border-color: var(--vintage-orange);
-}
-
-.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
-    content: '✓';
-    color: white;
-    font-weight: bold;
-    font-size: var(--text-sm);
-}
-
-.btn-large {
-    width: 100%;
-    padding: var(--space-lg) var(--space-2xl);
-    font-size: var(--text-lg);
-    font-weight: 700;
-    min-height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    transition: var(--transition-fast);
-}
-
-.btn-large:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-}
-
-.alert {
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-lg);
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-weight: 500;
-    animation: shake 0.5s ease-in-out;
-}
-
-.alert-error {
-    background: #fee;
-    color: #c33;
-    border: 1px solid #fcc;
-}
-
-.auth-footer {
-    text-align: center;
-    padding-top: var(--space-lg);
-    border-top: 1px solid #e9ecef;
-}
-
-.auth-link {
-    color: var(--vintage-orange);
-    text-decoration: none;
-    font-weight: 600;
-    transition: var(--transition-fast);
-    position: relative;
-}
-
-.auth-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--vintage-orange);
-    transition: var(--transition-fast);
-}
-
-.auth-link:hover {
-    color: var(--vintage-orange-dark);
-}
-
-.auth-link:hover::after {
-    width: 100%;
-}
-
-/* Responsive */
-@media (max-width: 767px) {
-    .auth-hero {
-        padding: var(--space-lg);
-    }
-    
-    .auth-card {
-        padding: var(--space-2xl);
-        margin: var(--space-sm);
-    }
-    
-    .auth-title {
-        font-size: var(--text-3xl);
-    }
-    
-    .form-input {
-        font-size: 16px; /* Prevent zoom on iOS */
-    }
-}
-
-@media (max-width: 480px) {
-    .auth-card {
-        padding: var(--space-xl);
-    }
-    
-    .auth-title {
-        flex-direction: column;
-        gap: var(--space-sm);
-    }
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-</style>
 {% endblock %}

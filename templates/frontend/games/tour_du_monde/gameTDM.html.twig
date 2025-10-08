@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tour du Monde - Jeu en cours{% endblock %}
+
+{% block body %}
+<div class="game-tdm-page">
+    <div class="container">
+        <!-- Game Header -->
+        <div class="game-header">
+            <h1 class="game-title">🏀 Tour du Monde</h1>
+            <div class="game-info">
+                <span class="participants-count">{{ participants|length }} joueur(s)</span>
+                <span class="active-participants">{{ participants|filter(p => not p.isEliminated)|length }} actif(s)</span>
+            </div>
+        </div>
+
+        <!-- Game Content -->
+        <div class="game-content">
+            <!-- Left Column: Notes -->
+            <div class="game-notes">
+                <h2>📝 Notes du jeu</h2>
+                <div class="notes-container">
+                    <div class="add-note-form">
+                        <div class="form-group">
+                            <textarea id="noteText" class="form-control" rows="3" 
+                                      placeholder="Ajoutez une note sur le jeu en cours..."></textarea>
+                        </div>
+                        <button id="addNoteBtn" class="btn btn-primary">
+                            <i class="icon">📝</i> Ajouter une note
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Game Controls -->
+            <div class="game-controls">
+                <!-- Add Participant Form -->
+                <div class="add-participant-section">
+                    <h3>➕ Ajouter un joueur</h3>
+                    <form method="POST" action="{{ path('app_tour_du_monde_game_add_participant') }}" class="add-participant-form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" name="playerName" class="form-control" 
+                                       placeholder="Nom du nouveau joueur" required>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="icon">➕</i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Participants List -->
+                <div class="participants-section">
+                    <h3>👥 Participants ({{ participants|length }})</h3>
+                    <div class="participants-list" id="participantsList">
+                        {% for participant in participants %}
+                            <div class="participant-item {% if participant.isEliminated %}eliminated{% endif %} {% if participant.isFinalist %}finalist{% endif %}">
+                                <div class="participant-info">
+                                    <div class="participant-header">
+                                        <span class="participant-number">#{{ participant.playerNumber }}</span>
+                                        <span class="participant-name">{{ participant.playerName }}</span>
+                                        {% if participant.isFinalist %}
+                                            <span class="finalist-badge">👑 Finaliste</span>
+                                        {% endif %}
+                                        {% if participant.isEliminated %}
+                                            <span class="eliminated-badge">❌ Éliminé</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="participant-stats">
+                                        <small>Position: {{ participant.currentPosition }} | Score: {{ participant.score }}</small>
+                                        {% if participant.shotsAttempted > 0 %}
+                                            <small>Réussite: {{ participant.getSuccessRate() }}% ({{ participant.shotsMade }}/{{ participant.shotsAttempted }})</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="participant-actions">
+                                    {% if not participant.isEliminated %}
+                                        <form method="POST" action="{{ path('app_tour_du_monde_game_set_finalist', {id: participant.id}) }}" style="display: inline;">
+                                            <button type="submit" class="btn btn-sm btn-warning">
+                                                <i class="icon">👑</i> Finaliste
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ path('app_tour_du_monde_game_eliminate', {id: participant.id}) }}" style="display: inline;" 
+                                              onsubmit="return confirm('Éliminer ce joueur ?')">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="icon">❌</i> Éliminer
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                    <form method="POST" action="{{ path('app_tour_du_monde_game_remove_participant', {id: participant.id}) }}" style="display: inline;" 
+                                          onsubmit="return confirm('Supprimer ce participant ?')">
+                                        <button type="submit" class="btn btn-sm btn-secondary">
+                                            <i class="icon">🗑️</i> Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Finalist Selection -->
+                <div class="finalist-section">
+                    <h3>🏆 Finaliste sélectionné</h3>
+                    {% if wheelData.hasFinalist %}
+                        <div class="finalist-info">
+                            <div class="finalist-card">
+                                <div class="finalist-name">{{ wheelData.finalist.playerName }}</div>
+                                <div class="finalist-stats">
+                                    Position: {{ wheelData.finalist.currentPosition }} | Score: {{ wheelData.finalist.score }}
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="no-finalist">
+                            <p>Aucun finaliste sélectionné</p>
+                            <p>Sélectionnez un finaliste parmi les participants</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Wheel Section -->
+                <div class="wheel-section">
+                    <h3>🎯 Roue de sélection</h3>
+                    {% if wheelData.canCreateWheel %}
+                        <div class="wheel-container">
+                            <div class="wheel" id="wheel">
+                                <div class="wheel-center">
+                                    <div class="wheel-pointer">⬇️</div>
+                                </div>
+                                <div class="wheel-participants" id="wheelParticipants">
+                                    {% for participant in wheelData.eligibleParticipants %}
+                                        <div class="wheel-participant" data-id="{{ participant.id }}">
+                                            {{ participant.playerName }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <form method="POST" action="{{ path('app_tour_du_monde_game_spin_wheel') }}" style="display: inline;">
+                                <button type="submit" class="btn btn-success btn-large">
+                                    <i class="icon">🎯</i> Lancer la roue ({{ wheelData.eligibleCount }} participants)
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="wheel-unavailable">
+                            {% if not wheelData.hasFinalist %}
+                                <p>❌ Aucun finaliste sélectionné</p>
+                                <p>Veuillez d'abord choisir un finaliste</p>
+                            {% else %}
+                                <p>❌ Aucun participant éligible</p>
+                                <p>Tous les participants sont finalistes ou éliminés</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Actions -->
+        <div class="game-actions">
+            <button id="pauseGameBtn" class="btn btn-secondary">
+                <i class="icon">⏸️</i> Pause
+            </button>
+            <button id="endGameBtn" class="btn btn-danger">
+                <i class="icon">🏁</i> Terminer le jeu
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const endGameBtn = document.getElementById('endGameBtn');
+    const addNoteBtn = document.getElementById('addNoteBtn');
+    const noteText = document.getElementById('noteText');
+
+    // Terminer le jeu
+    if (endGameBtn) {
+        endGameBtn.addEventListener('click', function() {
+            if (confirm('Êtes-vous sûr de vouloir terminer le jeu ? Tous les participants seront supprimés.')) {
+                // Soumettre le formulaire de fin de jeu
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ path('app_tour_du_monde_end_game') }}';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+
+    // Ajouter une note
+    if (addNoteBtn && noteText) {
+        addNoteBtn.addEventListener('click', function() {
+            const text = noteText.value.trim();
+            if (!text) {
+                alert('Veuillez entrer une note');
+                return;
+            }
+            
+            // Ici on pourrait ajouter une logique pour sauvegarder la note
+            alert('Note ajoutée : ' + text);
+            noteText.value = '';
+        });
+    }
+
+    // Animation de la roue (optionnelle, pour l'effet visuel)
+    const wheel = document.getElementById('wheel');
+    if (wheel) {
+        // Animation d'entrée
+        wheel.style.transform = 'rotate(0deg)';
+        wheel.style.transition = 'transform 0.5s ease-in-out';
+    }
+});
+</script>
+
+<!-- Inclusion du fichier JavaScript pour l'animation de roue -->
+<script src="{{ asset('js/wheel-animation.js') }}"></script>
+{% endblock %}

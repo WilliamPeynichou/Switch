@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Contrôleur principal pour l'authentification
@@ -22,7 +23,8 @@ class AuthController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $userPasswordHasher,
-        private UserService $userService
+        private UserService $userService,
+        private AuthenticationUtils $authenticationUtils
     ) {}
 
     /**
@@ -32,14 +34,23 @@ class AuthController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request): Response
     {
+        // Rediriger si déjà connecté
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userService->registerUser($user, $form->get('plainPassword')->getData());
-            $this->addFlash('success', 'Votre compte a été créé avec succès !');
-            return $this->redirectToRoute('app_login');
+            try {
+                $this->userService->registerUser($user, $form->get('plainPassword')->getData());
+                $this->addFlash('success', 'Votre compte a été créé avec succès ! Bienvenue sur Switch Game !');
+                return $this->redirectToRoute('app_home');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création du compte : ' . $e->getMessage());
+            }
         }
 
         return $this->render('security/register.html.twig', [
@@ -54,7 +65,20 @@ class AuthController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(): Response
     {
-        return $this->render('security/login.html.twig');
+        // Rediriger si déjà connecté
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // Récupérer l'erreur de connexion s'il y en a une
+        $error = $this->authenticationUtils->getLastAuthenticationError();
+        // Dernier nom d'utilisateur saisi par l'utilisateur
+        $lastUsername = $this->authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
     }
 
     /**
@@ -106,14 +130,57 @@ class AuthController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userService->updateUserProfile($user, $form->get('plainPassword')->getData());
-            $this->addFlash('success', 'Votre profil a été mis à jour !');
-            return $this->redirectToRoute('app_profile');
+            try {
+                $plainPassword = $form->get('plainPassword')->getData();
+                $this->userService->updateUserProfile($user, $plainPassword);
+                $this->addFlash('success', 'Votre profil a été mis à jour avec succès !');
+                return $this->redirectToRoute('app_profile');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour : ' . $e->getMessage());
+            }
         }
 
         return $this->render('security/edit_profile.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Suppression du compte utilisateur
+     * Route: /profile/delete
+     */
+    #[Route('/profile/delete', name: 'app_profile_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function deleteProfile(Request $request): Response
+    {
+        $user = $this->getUser();
+        
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Vérifier le token CSRF
+        $submittedToken = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('delete-profile', $submittedToken)) {
+            $this->addFlash('error', 'Token de sécurité invalide.');
+            return $this->redirectToRoute('app_profile');
+        }
+
+        try {
+            // Désactiver le compte au lieu de le supprimer
+            $user->setActive(false);
+            $this->entityManager->flush();
+            
+            // Déconnecter l'utilisateur
+            $this->container->get('security.token_storage')->setToken(null);
+            $request->getSession()->invalidate();
+            
+            $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+            return $this->redirectToRoute('app_home');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Une erreur est survenue lors de la suppression : ' . $e->getMessage());
+            return $this->redirectToRoute('app_profile');
+        }
     }
 }

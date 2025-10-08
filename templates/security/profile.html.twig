@@ -118,6 +118,27 @@
                 {% endif %}
             </div>
         </div>
+
+        <!-- Section de suppression du compte -->
+        <div class="profile-section">
+            <div class="section-header">
+                <h2>Zone dangereuse</h2>
+                <p>Actions irréversibles</p>
+            </div>
+            <div class="section-content">
+                <div class="danger-zone">
+                    <h3>Supprimer mon compte</h3>
+                    <p>Cette action est irréversible. Toutes vos données seront supprimées.</p>
+                    <form method="post" action="{{ path('app_profile_delete') }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete-profile') }}">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="icon">🗑️</i>
+                            Supprimer mon compte
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

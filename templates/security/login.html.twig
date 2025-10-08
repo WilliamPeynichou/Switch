@@ -23,14 +23,14 @@
 
                 <div class="auth-form-group">
                     <label for="inputEmail" class="auth-label">Email</label>
-                    <input type="email" value="{{ last_username ?? '' }}" name="email" id="inputEmail" 
+                    <input type="email" value="{{ last_username ?? '' }}" name="_username" id="inputEmail" 
                            class="auth-input" autocomplete="email" required autofocus
                            placeholder="votre@email.com">
                 </div>
 
                 <div class="auth-form-group">
                     <label for="inputPassword" class="auth-label">Mot de passe</label>
-                    <input type="password" name="password" id="inputPassword" 
+                    <input type="password" name="_password" id="inputPassword" 
                            class="auth-input" autocomplete="current-password" required
                            placeholder="Votre mot de passe">
                 </div>
@@ -41,8 +41,6 @@
                         Se souvenir de moi
                     </label>
                 </div>
-
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                 <button type="submit" class="auth-btn auth-btn-primary">
                     <i class="icon">🚀</i>

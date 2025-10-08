@@ -6,6 +6,9 @@
             <nav>
                 <ul class="nav-menu">
                     <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    {% if app.user %}
+                        <li><a href="{{ path('app_statistics_index') }}">Statistiques</a></li>
+                    {% endif %}
                 </ul>
             </nav>
             
@@ -18,11 +21,16 @@
                                 <i class="icon">👤</i>
                                 Mon profil
                             </a>
+                            <a href="{{ path('app_profile_edit') }}" class="dropdown-link">
+                                <i class="icon">⚙️</i>
+                                Modifier profil
+                            </a>
                             <a href="{{ path('app_statistics_index') }}" class="dropdown-link">
                                 <i class="icon">📊</i>
                                 Mes statistiques
                             </a>
-                            <a href="{{ path('app_logout') }}" class="dropdown-link">
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ path('app_logout') }}" class="dropdown-link logout">
                                 <i class="icon">🚪</i>
                                 Déconnexion
                             </a>
@@ -30,8 +38,8 @@
                     </div>
                 {% else %}
                     <div class="auth-links">
-                        <a href="/Switch_Game/public/index.php/login" class="btn btn-outline">Connexion</a>
-                        <a href="/Switch_Game/public/index.php/register" class="btn btn-primary">Inscription</a>
+                        <a href="{{ path('app_login') }}" class="btn btn-outline">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="btn btn-primary">Inscription</a>
                     </div>
                 {% endif %}
             </div>

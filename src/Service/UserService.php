@@ -15,7 +15,7 @@ class UserService
         private ValidatorInterface $validator
     ) {}
 
-    public function createUser(User $user, string $plainPassword): void
+    public function registerUser(User $user, string $plainPassword): void
     {
         // Validation des données
         $errors = $this->validator->validate($user);
@@ -24,13 +24,13 @@ class UserService
         }
 
         // Encoder le mot de passe
-        $user->setPasswordHash(
+        $user->setPassword(
             $this->userPasswordHasher->hashPassword($user, $plainPassword)
         );
 
         // Définir les propriétés par défaut
         $user->setRole('ROLE_USER');
-        $user->setIsActive(true);
+        $user->setActive(true);
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setUpdatedAt(new \DateTimeImmutable());
 
@@ -38,7 +38,7 @@ class UserService
         $this->entityManager->flush();
     }
 
-    public function updateUser(User $user, ?string $plainPassword = null): void
+    public function updateUserProfile(User $user, ?string $plainPassword = null): void
     {
         // Validation des données
         $errors = $this->validator->validate($user);
@@ -48,7 +48,7 @@ class UserService
 
         // Mettre à jour le mot de passe si fourni
         if ($plainPassword) {
-            $user->setPasswordHash(
+            $user->setPassword(
                 $this->userPasswordHasher->hashPassword($user, $plainPassword)
             );
         }

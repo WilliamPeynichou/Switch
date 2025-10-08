@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Règles de {{ game.name ?? 'Jeu' }} - Switch Game{% endblock %}
+
+{% block body %}
+<div class="rules-hero-section">
+    <div class="container">
+        <div class="rules-hero-content">
+            <h1 class="rules-title">Règles de {{ game.name ?? 'Jeu' }}</h1>
+            <p class="rules-subtitle">Tout ce que vous devez savoir pour jouer</p>
+        </div>
+    </div>
+</div>
+
+<div class="rules-content-section">
+    <div class="container">
+        <div class="rules-grid">
+            <!-- Règles principales -->
+            <div class="rules-card main-rules">
+                <h2 class="card-title">
+                    <span class="title-icon">📋</span>
+                    Règles Principales
+                </h2>
+                <div class="card-content">
+                    <div class="rules-text">
+                        {{ game.baseRules ?? 'Règles du jeu à définir' }}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informations du jeu -->
+            <div class="rules-card game-info">
+                <h2 class="card-title">
+                    <span class="title-icon">ℹ️</span>
+                    Informations du Jeu
+                </h2>
+                <div class="card-content">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <i class="icon">👥</i>
+                            <div class="info-content">
+                                <strong>Nombre de joueurs :</strong>
+                                <span>{{ game.minPlayers ?? 1 }} - {{ game.maxPlayers ?? 4 }} joueurs</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="icon">⏱️</i>
+                            <div class="info-content">
+                                <strong>Durée moyenne :</strong>
+                                <span>{{ game.defaultDurationMinutes ?? 30 }} minutes</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="icon">🎯</i>
+                            <div class="info-content">
+                                <strong>Type de jeu :</strong>
+                                <span>{{ (game.gameType ?? 'position_based')|replace({'_': ' '})|title }}</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="icon">📅</i>
+                            <div class="info-content">
+                                <strong>Créé le :</strong>
+                                <span>{{ game.createdAt ? game.createdAt|date('d/m/Y') : 'Date inconnue' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Positions du jeu -->
+        {% if positions is defined and positions is not empty %}
+        <div class="positions-section">
+            <h2 class="section-title">
+                <span class="title-icon">📍</span>
+                Positions du Jeu
+            </h2>
+            
+            <div class="positions-timeline">
+                {% for position in positions %}
+                    <div class="position-step">
+                        <div class="position-number">
+                            {{ position.positionNumber ?? loop.index }}
+                        </div>
+                        <div class="position-content">
+                            <h3>{{ position.positionName ?? 'Position ' ~ loop.index }}</h3>
+                            {% if position.positionDescription %}
+                                <p>{{ position.positionDescription }}</p>
+                            {% endif %}
+                            <div class="position-details">
+                                {% if position.pointsValue ?? 0 > 0 %}
+                                    <span class="position-points">
+                                        <i class="icon">⭐</i>
+                                        {{ position.pointsValue }} points
+                                    </span>
+                                {% endif %}
+                                {% if position.isFinalPosition ?? false %}
+                                    <span class="position-badge final">Position Finale</span>
+                                {% endif %}
+                                {% if position.coordinatesX ?? 0 > 0 or position.coordinatesY ?? 0 > 0 %}
+                                    <span class="position-coordinates">
+                                        <i class="icon">📍</i>
+                                        X: {{ position.coordinatesX ?? 0 }}, Y: {{ position.coordinatesY ?? 0 }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Conseils et astuces -->
+        <div class="tips-section">
+            <h2 class="section-title">
+                <span class="title-icon">💡</span>
+                Conseils et Astuces
+            </h2>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h3>Concentration</h3>
+                    <p>Restez concentré sur chaque position. La précision est plus importante que la vitesse.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">⏱️</div>
+                    <h3>Gestion du temps</h3>
+                    <p>Prenez votre temps pour chaque tir. Mieux vaut un tir réussi qu'un tir précipité.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">👥</div>
+                    <h3>Esprit d'équipe</h3>
+                    <p>Encouragez vos coéquipiers et apprenez de leurs techniques.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">🏆</div>
+                    <h3>Objectif</h3>
+                    <p>L'objectif est de progresser position par position jusqu'à la position finale.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="rules-actions">
+            <div class="action-buttons">
+                <a href="{{ path('app_game_show', {id: game.id ?? 1}) }}" class="btn btn-secondary">
+                    <i class="icon">🔙</i>
+                    Retour au jeu
+                </a>
+                <a href="{{ path('app_game_play', {id: game.id ?? 1}) }}" class="btn btn-primary">
+                    <i class="icon">▶️</i>
+                    Commencer à jouer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

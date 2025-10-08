@@ -146,4 +146,94 @@ class GameStatisticRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Trouve les statistiques par utilisateur
+     */
+    public function findByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('gs')
+            ->join('gs.player', 'p')
+            ->join('p.user', 'u')
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('gs.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Calcule le score moyen par jeu
+     */
+    public function getAverageScoreByGame(int $gameId): float
+    {
+        $result = $this->createQueryBuilder('gs')
+            ->select('AVG(gs.totalPoints)')
+            ->join('gs.session', 's')
+            ->andWhere('s.game = :gameId')
+            ->setParameter('gameId', $gameId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result ? (float) $result : 0.0;
+    }
+
+    /**
+     * Trouve le meilleur score par jeu
+     */
+    public function getBestScoreByGame(int $gameId): int
+    {
+        $result = $this->createQueryBuilder('gs')
+            ->select('MAX(gs.totalPoints)')
+            ->join('gs.session', 's')
+            ->andWhere('s.game = :gameId')
+            ->setParameter('gameId', $gameId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result ? (int) $result : 0;
+    }
+
+    /**
+     * Calcule le nombre moyen de tirs par jeu
+     */
+    public function getAverageShotsByGame(int $gameId): float
+    {
+        $result = $this->createQueryBuilder('gs')
+            ->select('AVG(gs.shotsAttempted)')
+            ->join('gs.session', 's')
+            ->andWhere('s.game = :gameId')
+            ->setParameter('gameId', $gameId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result ? (float) $result : 0.0;
+    }
+
+    /**
+     * Calcule le taux de réussite par jeu
+     */
+    public function getSuccessRateByGame(int $gameId): float
+    {
+        $result = $this->createQueryBuilder('gs')
+            ->select('AVG(CASE WHEN gs.shotsAttempted > 0 THEN gs.shotsMade / gs.shotsAttempted ELSE 0 END)')
+            ->join('gs.session', 's')
+            ->andWhere('s.game = :gameId')
+            ->setParameter('gameId', $gameId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result ? (float) $result : 0.0;
+    }
+
+    /**
+     * Compte le nombre de joueurs distincts
+     */
+    public function countDistinctPlayers(): int
+    {
+        return $this->createQueryBuilder('gs')
+            ->select('COUNT(DISTINCT gs.player)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

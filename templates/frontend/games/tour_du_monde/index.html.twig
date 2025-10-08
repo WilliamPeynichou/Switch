@@ -1,0 +1,546 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tour du Monde - Switch Game{% endblock %}
+
+{% block body %}
+<div class="tour-du-monde-hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="game-title">
+                <span class="title-icon">🌍</span>
+                Tour du Monde
+            </h1>
+            <p class="game-subtitle">Le jeu de basket le plus épique ! Parcourez le monde des positions et affrontez-vous en 1 contre 1 !</p>
+        </div>
+    </div>
+</div>
+
+<!-- Règles du jeu -->
+<div class="game-rules-section">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="title-icon">📋</span>
+            Règles du Tour du Monde
+        </h2>
+        
+        <div class="rules-content">
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-icon">🎯</div>
+                    <h3>Objectif</h3>
+                    <p>Parcourez toutes les positions du terrain en marquant des paniers. Le premier à atteindre la position finale affronte un adversaire en 1 contre 1 !</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">📍</div>
+                    <h3>Positions</h3>
+                    <p>Commencez à la position 1 et progressez position par position. Chaque position doit être validée par un panier réussi.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">⚡</div>
+                    <h3>Pénalités</h3>
+                    <p><strong>Airball :</strong> -2 positions<br><strong>Brique :</strong> -1 position<br>Attention à ne pas reculer trop !</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">🏆</div>
+                    <h3>Finale</h3>
+                    <p>Le premier à atteindre la position finale affronte un adversaire choisi aléatoirement dans la roue de la fortune !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Configuration du jeu -->
+<div class="game-setup-section">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="title-icon">⚙️</span>
+            Configuration de la Partie
+        </h2>
+        
+        <div class="setup-card">
+            <form id="game-setup-form" method="POST" action="{{ path('app_tour_du_monde_setup') }}">
+                <div class="form-grid">
+                    <!-- Nom de la session -->
+                    <div class="form-group">
+                        <label for="sessionName">Nom de la session :</label>
+                        <input type="text" id="sessionName" name="sessionName" 
+                               value="Tour du Monde - {{ 'now'|date('d/m/Y H:i') }}" 
+                               class="form-input" required>
+                    </div>
+                    
+                    <!-- Difficulté -->
+                    <div class="form-group">
+                        <label for="difficulty">Difficulté :</label>
+                        <select id="difficulty" name="difficulty" class="form-select" required>
+                            <option value="">Sélectionner une difficulté</option>
+                            {% for difficulty in difficulties %}
+                                <option value="{{ difficulty.id }}">{{ difficulty.name }} - {{ difficulty.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Participants -->
+                <div class="participants-section">
+                    <h3>Participants</h3>
+                    <p class="participants-help">Ajoutez au moins 2 participants pour commencer le jeu</p>
+                    
+                    <div id="participants-list" class="participants-list">
+                        <div class="participant-item">
+                            <input type="text" name="participants[]" placeholder="Nom du joueur 1" class="participant-input" required>
+                            <button type="button" class="btn-remove-participant" style="display: none;">❌</button>
+                        </div>
+                        <div class="participant-item">
+                            <input type="text" name="participants[]" placeholder="Nom du joueur 2" class="participant-input" required>
+                            <button type="button" class="btn-remove-participant" style="display: none;">❌</button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="add-participant" class="btn btn-secondary">
+                        <i class="icon">➕</i>
+                        Ajouter un participant
+                    </button>
+                </div>
+                
+                <!-- Actions -->
+                <div class="form-actions">
+                    <button type="submit" id="start-game" class="btn btn-primary">
+                        <i class="icon">🚀</i>
+                        Commencer le Tour du Monde !
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Informations sur les positions -->
+<div class="positions-info-section">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="title-icon">📍</span>
+            Positions du Tour du Monde
+        </h2>
+        
+        <div class="positions-timeline">
+            <div class="position-step">
+                <div class="position-number">1</div>
+                <div class="position-content">
+                    <h3>Départ - Côté gauche du panier (45°)</h3>
+                    <p>Position de départ. Marquez un panier pour passer à la position suivante.</p>
+                </div>
+            </div>
+            
+            <div class="position-step">
+                <div class="position-number">2</div>
+                <div class="position-content">
+                    <h3>Face panier (devant)</h3>
+                    <p>Position centrale. Un des plus faciles du parcours.</p>
+                </div>
+            </div>
+            
+            <div class="position-step">
+                <div class="position-number">3</div>
+                <div class="position-content">
+                    <h3>Côté droit du panier (45°)</h3>
+                    <p>Symétrique de la position 1. Attention à l'angle !</p>
+                </div>
+            </div>
+            
+            <div class="position-step">
+                <div class="position-number">4</div>
+                <div class="position-content">
+                    <h3>Ligne à 3 points</h3>
+                    <p>La distance augmente ! Concentration maximale requise.</p>
+                </div>
+            </div>
+            
+            <div class="position-step">
+                <div class="position-number">5</div>
+                <div class="position-content">
+                    <h3>Position finale</h3>
+                    <p>🏆 <strong>FÉLICITATIONS !</strong> Vous avez terminé le tour du monde !<br>
+                    La roue de la fortune va choisir votre adversaire pour le 1 contre 1 final !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* Styles spécifiques au Tour du Monde */
+.tour-du-monde-hero {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.game-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.title-icon {
+    font-size: 4rem;
+    margin-right: 1rem;
+}
+
+.game-subtitle {
+    font-size: 1.3rem;
+    margin: 1rem 0 0 0;
+    opacity: 0.9;
+}
+
+.game-rules-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--vintage-orange);
+}
+
+.rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.rule-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.rule-card:hover {
+    transform: translateY(-5px);
+}
+
+.rule-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.rule-card h3 {
+    color: var(--vintage-orange);
+    margin-bottom: 1rem;
+}
+
+.game-setup-section {
+    padding: 4rem 0;
+    background: white;
+}
+
+.setup-card {
+    background: #f8f9fa;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-input, .form-select {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--vintage-orange);
+}
+
+.participants-section {
+    margin: 2rem 0;
+}
+
+.participants-section h3 {
+    color: var(--vintage-orange);
+    margin-bottom: 1rem;
+}
+
+.participants-help {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.participants-list {
+    margin-bottom: 1.5rem;
+}
+
+.participant-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.participant-input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-remove-participant {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-remove-participant:hover {
+    background: #ff3742;
+}
+
+#add-participant {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#add-participant:hover {
+    background: #5a6268;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#start-game {
+    background: var(--vintage-orange);
+    color: white;
+    border: none;
+    padding: 1.5rem 3rem;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+#start-game:hover {
+    background: #e55a2b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+}
+
+.positions-info-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.positions-timeline {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.position-step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.position-step:hover {
+    transform: translateX(10px);
+}
+
+.position-number {
+    background: var(--vintage-orange);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 2rem;
+    flex-shrink: 0;
+}
+
+.position-content h3 {
+    color: var(--vintage-orange);
+    margin: 0 0 0.5rem 0;
+}
+
+.position-content p {
+    margin: 0;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .rules-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .position-step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .position-number {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// Gestion des participants
+let participantCount = 2;
+
+document.getElementById('add-participant').addEventListener('click', function() {
+    participantCount++;
+    
+    const participantsList = document.getElementById('participants-list');
+    const newParticipant = document.createElement('div');
+    newParticipant.className = 'participant-item';
+    newParticipant.innerHTML = `
+        <input type="text" name="participants[]" placeholder="Nom du joueur ${participantCount}" class="participant-input" required>
+        <button type="button" class="btn-remove-participant">❌</button>
+    `;
+    
+    participantsList.appendChild(newParticipant);
+    
+    // Afficher le bouton de suppression pour tous les participants
+    document.querySelectorAll('.btn-remove-participant').forEach(btn => {
+        btn.style.display = 'block';
+    });
+    
+    // Gérer la suppression
+    newParticipant.querySelector('.btn-remove-participant').addEventListener('click', function() {
+        if (participantCount > 2) {
+            newParticipant.remove();
+            participantCount--;
+            
+            // Masquer les boutons de suppression s'il n'y a que 2 participants
+            if (participantCount === 2) {
+                document.querySelectorAll('.btn-remove-participant').forEach(btn => {
+                    btn.style.display = 'none';
+                });
+            }
+        }
+    });
+});
+
+// Gestion des boutons de suppression existants
+document.querySelectorAll('.btn-remove-participant').forEach(btn => {
+    btn.addEventListener('click', function() {
+        if (participantCount > 2) {
+            this.parentElement.remove();
+            participantCount--;
+            
+            // Masquer les boutons de suppression s'il n'y a que 2 participants
+            if (participantCount === 2) {
+                document.querySelectorAll('.btn-remove-participant').forEach(btn => {
+                    btn.style.display = 'none';
+                });
+            }
+        }
+    });
+});
+
+// Validation du formulaire
+document.getElementById('game-setup-form').addEventListener('submit', function(e) {
+    const participants = document.querySelectorAll('input[name="participants[]"]');
+    const validParticipants = Array.from(participants).filter(input => input.value.trim() !== '');
+    
+    if (validParticipants.length < 2) {
+        e.preventDefault();
+        alert('Il faut au moins 2 participants pour jouer !');
+        return;
+    }
+    
+    // Vérifier les doublons
+    const names = validParticipants.map(input => input.value.trim().toLowerCase());
+    const uniqueNames = [...new Set(names)];
+    
+    if (names.length !== uniqueNames.length) {
+        e.preventDefault();
+        alert('Les noms des participants doivent être uniques !');
+        return;
+    }
+});
+
+// Animation d'entrée
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.rule-card, .position-step');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+</script>
+{% endblock %}

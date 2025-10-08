@@ -1,0 +1,568 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ sessionName }} - Tour du Monde{% endblock %}
+
+{% block body %}
+<div class="game-interface">
+    <div class="container">
+        <!-- En-tête du jeu -->
+        <div class="game-header">
+            <div class="game-info">
+                <h1 class="game-title">
+                    <span class="title-icon">🌍</span>
+                    {{ sessionName }}
+                </h1>
+                <div class="game-details">
+                    <span class="difficulty-badge difficulty-{{ difficulty.level }}">
+                        {{ difficulty.name }}
+                    </span>
+                    <span class="participants-count">
+                        <i class="icon">👥</i>
+                        {{ participants|length }} participants
+                    </span>
+                </div>
+            </div>
+            
+            <div class="game-controls">
+                <button id="start-timer" class="btn btn-primary">
+                    <i class="icon">▶️</i>
+                    Démarrer
+                </button>
+                <button id="pause-timer" class="btn btn-secondary" disabled>
+                    <i class="icon">⏸️</i>
+                    Pause
+                </button>
+                <button id="stop-timer" class="btn btn-danger" disabled>
+                    <i class="icon">⏹️</i>
+                    Arrêter
+                </button>
+            </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="timer-section">
+            <div class="timer-display">
+                <span id="timer-display">00:00:00</span>
+            </div>
+        </div>
+
+        <!-- Participants -->
+        <div class="participants-section">
+            <h2>Participants</h2>
+            <div class="participants-grid">
+                {% for participant in participants %}
+                <div class="participant-card" data-participant="{{ participant }}">
+                    <div class="participant-info">
+                        <h3>{{ participant }}</h3>
+                        <div class="participant-stats">
+                            <span class="current-position">Position: <strong>1</strong></span>
+                            <span class="shots-made">Paniers: <strong>0</strong></span>
+                            <span class="shots-attempted">Tentatives: <strong>0</strong></span>
+                        </div>
+                    </div>
+                    <div class="participant-actions">
+                        <button class="btn btn-success btn-sm" onclick="markShot({{ loop.index0 }}, true)">
+                            <i class="icon">✅</i>
+                            Panier
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="markShot({{ loop.index0 }}, false)">
+                            <i class="icon">❌</i>
+                            Raté
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="markAirball({{ loop.index0 }})">
+                            <i class="icon">💨</i>
+                            Airball
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="markBrick({{ loop.index0 }})">
+                            <i class="icon">🧱</i>
+                            Brique
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Roue de la fortune -->
+        <div class="wheel-section" id="wheel-section" style="display: none;">
+            <h2>🏆 Finale - Roue de la Fortune</h2>
+            <p>Un joueur a atteint la position finale ! La roue va choisir son adversaire pour le 1 contre 1 final.</p>
+            
+            <div class="wheel-container">
+                <div class="wheel" id="wheel">
+                    <div class="wheel-center">
+                        <div class="wheel-pointer">▼</div>
+                    </div>
+                    <div class="wheel-segments" id="wheel-segments">
+                        {% for participant in participants %}
+                        <div class="wheel-segment" data-participant="{{ participant }}">
+                            <span>{{ participant }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="wheel-controls">
+                    <button id="spin-wheel" class="btn btn-primary btn-large">
+                        <i class="icon">🎯</i>
+                        Lancer la roue !
+                    </button>
+                </div>
+            </div>
+            
+            <div class="wheel-result" id="wheel-result" style="display: none;">
+                <div class="result-card">
+                    <h3>🎉 Résultat de la roue</h3>
+                    <p>L'adversaire choisi est : <strong id="selected-participant"></strong></p>
+                    <p>Le 1 contre 1 final peut commencer !</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes du maître de jeu -->
+        <div class="game-notes">
+            <h3>📝 Notes du maître de jeu</h3>
+            <textarea id="game-notes" placeholder="Enregistrez ici les événements importants, les pénalités, les moments forts..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmation -->
+<div id="confirmation-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Confirmer l'action</h3>
+        <p id="modal-message"></p>
+        <div class="modal-actions">
+            <button id="confirm-action" class="btn btn-primary">Confirmer</button>
+            <button id="cancel-action" class="btn btn-secondary">Annuler</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* Styles spécifiques au jeu Tour du Monde */
+.game-interface {
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.game-title {
+    font-size: 2.5rem;
+    color: var(--vintage-orange);
+    margin: 0;
+}
+
+.game-details {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.difficulty-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: bold;
+    color: white;
+}
+
+.difficulty-1 { background: #4CAF50; }
+.difficulty-2 { background: #FF9800; }
+.difficulty-3 { background: #F44336; }
+.difficulty-4 { background: #9C27B0; }
+.difficulty-5 { background: #E91E63; }
+
+.participants-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+}
+
+.timer-section {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--vintage-orange);
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: inline-block;
+}
+
+.participants-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.participants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.participant-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.participant-card:hover {
+    border-color: var(--vintage-orange);
+    transform: translateY(-2px);
+}
+
+.participant-info h3 {
+    margin: 0 0 1rem 0;
+    color: var(--vintage-orange);
+}
+
+.participant-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.participant-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.wheel-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.wheel-container {
+    margin: 2rem 0;
+}
+
+.wheel {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: conic-gradient(
+        #FF6B35 0deg 72deg,
+        #4CAF50 72deg 144deg,
+        #2196F3 144deg 216deg,
+        #FF9800 216deg 288deg,
+        #9C27B0 288deg 360deg
+    );
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.wheel-pointer {
+    font-size: 1.5rem;
+    color: var(--vintage-orange);
+}
+
+.wheel-segments {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.wheel-segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.wheel-result {
+    margin-top: 2rem;
+}
+
+.result-card {
+    background: linear-gradient(135deg, #FF6B35, #FF8A65);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.game-notes {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.game-notes textarea {
+    width: 100%;
+    height: 150px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Animation de la roue */
+.wheel.spinning {
+    animation: spin 3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(1800deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .participants-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .wheel {
+        width: 250px;
+        height: 250px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// Variables globales
+let gameTimer = null;
+let gameStartTime = null;
+let gamePausedTime = 0;
+let isGameRunning = false;
+let participants = {{ participants|json_encode|raw }};
+
+// Timer du jeu
+function updateTimer() {
+    if (!isGameRunning) return;
+    
+    const now = Date.now();
+    const elapsed = now - gameStartTime - gamePausedTime;
+    const totalSeconds = Math.floor(elapsed / 1000);
+    
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    document.getElementById('timer-display').textContent = 
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Contrôles du timer
+document.getElementById('start-timer').addEventListener('click', function() {
+    if (!isGameRunning) {
+        gameStartTime = Date.now();
+        isGameRunning = true;
+        gameTimer = setInterval(updateTimer, 1000);
+        
+        this.disabled = true;
+        document.getElementById('pause-timer').disabled = false;
+        document.getElementById('stop-timer').disabled = false;
+    }
+});
+
+document.getElementById('pause-timer').addEventListener('click', function() {
+    if (isGameRunning) {
+        isGameRunning = false;
+        clearInterval(gameTimer);
+        gamePausedTime += Date.now() - gameStartTime;
+        
+        this.disabled = true;
+        document.getElementById('start-timer').disabled = false;
+    }
+});
+
+document.getElementById('stop-timer').addEventListener('click', function() {
+    isGameRunning = false;
+    clearInterval(gameTimer);
+    
+    document.getElementById('start-timer').disabled = false;
+    document.getElementById('pause-timer').disabled = true;
+    this.disabled = true;
+});
+
+// Gestion des tirs
+function markShot(participantIndex, made) {
+    const participantCard = document.querySelectorAll('.participant-card')[participantIndex];
+    const shotsMade = participantCard.querySelector('.shots-made strong');
+    const shotsAttempted = participantCard.querySelector('.shots-attempted strong');
+    
+    let madeCount = parseInt(shotsMade.textContent);
+    let attemptedCount = parseInt(shotsAttempted.textContent);
+    
+    attemptedCount++;
+    if (made) {
+        madeCount++;
+    }
+    
+    shotsMade.textContent = madeCount;
+    shotsAttempted.textContent = attemptedCount;
+    
+    // Vérifier si le joueur a atteint la position finale
+    if (made && madeCount >= 5) { // 5 positions pour finir le tour du monde
+        showWheel();
+    }
+}
+
+function markAirball(participantIndex) {
+    const participantCard = document.querySelectorAll('.participant-card')[participantIndex];
+    const currentPosition = participantCard.querySelector('.current-position strong');
+    let position = parseInt(currentPosition.textContent);
+    
+    position = Math.max(1, position - 2); // -2 positions pour airball
+    currentPosition.textContent = position;
+    
+    // Marquer la tentative
+    markShot(participantIndex, false);
+}
+
+function markBrick(participantIndex) {
+    const participantCard = document.querySelectorAll('.participant-card')[participantIndex];
+    const currentPosition = participantCard.querySelector('.current-position strong');
+    let position = parseInt(currentPosition.textContent);
+    
+    position = Math.max(1, position - 1); // -1 position pour brique
+    currentPosition.textContent = position;
+    
+    // Marquer la tentative
+    markShot(participantIndex, false);
+}
+
+// Roue de la fortune
+function showWheel() {
+    document.getElementById('wheel-section').style.display = 'block';
+    document.getElementById('wheel-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById('spin-wheel').addEventListener('click', function() {
+    const wheel = document.getElementById('wheel');
+    const result = document.getElementById('wheel-result');
+    const selectedParticipant = document.getElementById('selected-participant');
+    
+    // Désactiver le bouton
+    this.disabled = true;
+    this.textContent = '🎯 Roue en cours...';
+    
+    // Faire tourner la roue
+    wheel.classList.add('spinning');
+    
+    // Arrêter la roue après 3 secondes
+    setTimeout(() => {
+        wheel.classList.remove('spinning');
+        
+        // Sélectionner un participant aléatoire
+        const randomIndex = Math.floor(Math.random() * participants.length);
+        const selected = participants[randomIndex];
+        
+        selectedParticipant.textContent = selected;
+        result.style.display = 'block';
+        
+        // Réactiver le bouton
+        this.disabled = false;
+        this.textContent = '🎯 Relancer la roue !';
+    }, 3000);
+});
+
+// Sauvegarde automatique des notes
+document.getElementById('game-notes').addEventListener('input', function() {
+    localStorage.setItem('tour-du-monde-notes', this.value);
+});
+
+// Charger les notes sauvegardées
+window.addEventListener('load', function() {
+    const savedNotes = localStorage.getItem('tour-du-monde-notes');
+    if (savedNotes) {
+        document.getElementById('game-notes').value = savedNotes;
+    }
+});
+</script>
+{% endblock %}

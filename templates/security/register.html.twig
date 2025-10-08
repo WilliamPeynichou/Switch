@@ -1,0 +1,346 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Switch Game{% endblock %}
+
+{% block body %}
+<div class="auth-hero">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">
+                    <span class="title-icon">📝</span>
+                    Inscription
+                </h1>
+                <p class="auth-subtitle">Créez votre compte Switch Game</p>
+            </div>
+
+            {{ form_start(registrationForm, {'attr': {'class': 'auth-form'}}) }}
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-input', 'placeholder': 'votre@email.com'}}) }}
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.username, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.username, {'attr': {'class': 'form-input', 'placeholder': 'Votre nom d\'utilisateur'}}) }}
+                        {{ form_errors(registrationForm.username) }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-input', 'placeholder': 'Votre prénom'}}) }}
+                        {{ form_errors(registrationForm.firstName) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-input', 'placeholder': 'Votre nom'}}) }}
+                        {{ form_errors(registrationForm.lastName) }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-input', 'placeholder': 'Votre mot de passe'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-input', 'placeholder': 'Confirmez votre mot de passe'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.second) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        {{ form_widget(registrationForm.agreeTerms) }}
+                        <span class="checkmark"></span>
+                        J'accepte les <a href="#" class="terms-link">conditions d'utilisation</a>
+                    </label>
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large">
+                    <i class="icon">🚀</i>
+                    Créer mon compte
+                </button>
+            {{ form_end(registrationForm) }}
+
+            <div class="auth-footer">
+                <p>Déjà un compte ? <a href="{{ path('app_login') }}" class="auth-link">Se connecter</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+.auth-hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--vintage-orange) 0%, var(--vintage-orange-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.auth-card {
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    padding: var(--space-3xl);
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.auth-title {
+    font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+    color: var(--vintage-orange);
+    margin: 0 0 var(--space-lg) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    font-weight: 900;
+}
+
+.title-icon {
+    font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
+}
+
+.auth-subtitle {
+    color: var(--vintage-gray);
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: 1.6;
+}
+
+.auth-form {
+    margin-bottom: var(--space-2xl);
+}
+
+.form-row {
+    display: grid;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    grid-template-columns: 1fr;
+}
+
+.form-row:has(.form-group:nth-child(2)) {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+    color: var(--vintage-blue);
+    font-size: var(--text-sm);
+}
+
+.form-input {
+    padding: var(--space-lg);
+    border: 2px solid #e9ecef;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    transition: var(--transition-fast);
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--vintage-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-input:hover {
+    border-color: var(--vintage-orange-light);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--vintage-gray);
+    transition: var(--transition-fast);
+}
+
+.checkbox-label:hover {
+    color: var(--vintage-orange);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e9ecef;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    background: white;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: var(--vintage-orange);
+    border-color: var(--vintage-orange);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    color: white;
+    font-weight: bold;
+    font-size: var(--text-sm);
+}
+
+.terms-link {
+    color: var(--vintage-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+.terms-link:hover {
+    color: var(--vintage-orange-dark);
+    text-decoration: underline;
+}
+
+.btn-large {
+    width: 100%;
+    padding: var(--space-lg) var(--space-2xl);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    transition: var(--transition-fast);
+}
+
+.btn-large:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.auth-footer {
+    text-align: center;
+    padding-top: var(--space-lg);
+    border-top: 1px solid #e9ecef;
+}
+
+.auth-link {
+    color: var(--vintage-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.auth-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--vintage-orange);
+    transition: var(--transition-fast);
+}
+
+.auth-link:hover {
+    color: var(--vintage-orange-dark);
+}
+
+.auth-link:hover::after {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .auth-hero {
+        padding: var(--space-lg);
+    }
+    
+    .auth-card {
+        padding: var(--space-2xl);
+        margin: var(--space-sm);
+    }
+    
+    .auth-title {
+        font-size: var(--text-3xl);
+    }
+    
+    .form-row:has(.form-group:nth-child(2)) {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: var(--space-xl);
+    }
+    
+    .auth-title {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %}

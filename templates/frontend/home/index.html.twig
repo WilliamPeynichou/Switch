@@ -12,32 +12,145 @@
             </h1>
             <p class="hero-subtitle">L'expérience sportive vintage qui vous transporte</p>
             <div class="hero-buttons">
-                <a href="#" class="btn btn-primary">Commencer</a>
-                <a href="#" class="btn btn-secondary">Découvrir</a>
+                <a href="#games-section" class="btn btn-primary">Découvrir les jeux</a>
+                <a href="#popular-section" class="btn btn-secondary">Jeux populaires</a>
             </div>
         </div>
     </div>
 </div>
 
-<div class="features-section">
+<!-- Section des jeux populaires -->
+{% if popularGames is defined and popularGames is not empty %}
+<div id="popular-section" class="popular-games-section">
     <div class="container">
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3>Compétitions</h3>
-                <p>Participez aux tournois les plus prestigieux</p>
+        <h2 class="section-title">
+            <span class="title-icon">🔥</span>
+            Jeux Populaires
+        </h2>
+        <div class="popular-games-grid">
+            {% for game in popularGames %}
+                <div class="popular-game-card">
+                    <div class="game-image">
+                        <div class="game-placeholder">🏀</div>
+                    </div>
+                    <div class="game-info">
+                        <h3>{{ game.name ?? 'Jeu' }}</h3>
+                        <p>{{ game.description ?? 'Description du jeu' }}</p>
+                        <div class="game-stats">
+                            <span class="stat">
+                                <i class="icon">👥</i>
+                                {{ game.minPlayers ?? 1 }}-{{ game.maxPlayers ?? 4 }} joueurs
+                            </span>
+                            <span class="stat">
+                                <i class="icon">⏱️</i>
+                                {{ game.defaultDurationMinutes ?? 30 }} min
+                            </span>
+                        </div>
+                        <a href="#games-section" class="btn btn-small">Jouer</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Section principale des jeux -->
+<div id="games-section" class="games-section">
+    <div class="container">
+        <h2 class="section-title">
+            <span class="title-icon">🎮</span>
+            Tous les Jeux
+        </h2>
+        
+        <!-- Filtres -->
+        <div class="games-filters">
+            <div class="filter-group">
+                <label for="difficulty-filter">Difficulté :</label>
+                <select id="difficulty-filter" class="filter-select">
+                    <option value="">Toutes</option>
+                    {% for difficulty in difficulties %}
+                        <option value="{{ difficulty.id }}">{{ difficulty.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚽</div>
-                <h3>Sports</h3>
-                <p>Découvrez une variété de disciplines sportives</p>
+            <div class="filter-group">
+                <label for="type-filter">Type :</label>
+                <select id="type-filter" class="filter-select">
+                    <option value="">Tous</option>
+                    <option value="position_based">Par positions</option>
+                    <option value="score_based">Par score</option>
+                    <option value="time_based">Chronométré</option>
+                </select>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3>Performance</h3>
-                <p>Suivez vos progrès et améliorez vos performances</p>
+        </div>
+
+        <!-- Grille des jeux avec scroll -->
+        <div class="games-scroll-container">
+            <div class="games-grid">
+                {% if games is defined and games is not empty %}
+                    {% for game in games %}
+                        <div class="game-card" 
+                             data-difficulty=""
+                             data-type="{{ game.gameType ?? 'position_based' }}">
+                            <div class="game-header">
+                                <div class="game-image">
+                                    <div class="game-placeholder">🏀</div>
+                                </div>
+                                <div class="game-badge">
+                                    {% if game.isOfficial ?? false %}
+                                        <span class="badge official">Officiel</span>
+                                    {% else %}
+                                        <span class="badge custom">Personnalisé</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="game-content">
+                                <h3 class="game-title">{{ game.name ?? 'Jeu' }}</h3>
+                                <p class="game-description">{{ game.description ?? 'Description du jeu' }}</p>
+                                
+                                <div class="game-rules">
+                                    <h4>Règles :</h4>
+                                    <p>{{ (game.baseRules ?? 'Règles du jeu')|slice(0, 150) }}{% if (game.baseRules ?? '')|length > 150 %}...{% endif %}</p>
+                                </div>
+                                
+                                <div class="game-stats">
+                                    <div class="stat">
+                                        <i class="icon">👥</i>
+                                        <span>{{ game.minPlayers ?? 1 }}-{{ game.maxPlayers ?? 4 }} joueurs</span>
+                                    </div>
+                                    <div class="stat">
+                                        <i class="icon">⏱️</i>
+                                        <span>{{ game.defaultDurationMinutes ?? 30 }} min</span>
+                                    </div>
+                                    <div class="stat">
+                                        <i class="icon">🎯</i>
+                                        <span>{{ (game.gameType ?? 'position_based')|replace({'_': ' '})|title }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="game-actions">
+                                    <a href="{{ path('app_game_show', {id: game.id ?? 1}) }}" class="btn btn-primary">
+                                        <i class="icon">▶️</i>
+                                        Jouer
+                                    </a>
+                                    <a href="{{ path('app_game_show', {id: game.id ?? 1}) }}" class="btn btn-secondary">
+                                        <i class="icon">ℹ️</i>
+                                        Détails
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-games">
+                        <p>Aucun jeu disponible pour le moment.</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

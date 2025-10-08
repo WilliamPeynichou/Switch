@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jouer à {{ game.name ?? 'Jeu' }} - Switch Game{% endblock %}
+
+{% block body %}
+<div class="game-play-hero">
+    <div class="container">
+        <div class="game-play-header">
+            <h1 class="game-title">{{ game.name ?? 'Jeu' }}</h1>
+            <p class="game-subtitle">Prêt à jouer ? Configurez votre partie !</p>
+        </div>
+    </div>
+</div>
+
+<!-- Configuration de la partie -->
+<div class="game-setup-section">
+    <div class="container">
+        <div class="setup-card">
+            <h2 class="card-title">
+                <span class="title-icon">⚙️</span>
+                Configuration de la Partie
+            </h2>
+            
+            <form class="game-setup-form" id="game-setup-form">
+                <div class="form-grid">
+                    <!-- Nom de la session -->
+                    <div class="form-group">
+                        <label for="session-name">Nom de la session :</label>
+                        <input type="text" id="session-name" name="sessionName" 
+                               value="Session {{ game.name ?? 'Jeu' }} - {{ 'now'|date('d/m/Y H:i') }}" 
+                               class="form-input" required>
+                    </div>
+                    
+                    <!-- Difficulté -->
+                    <div class="form-group">
+                        <label for="difficulty">Difficulté :</label>
+                        <select id="difficulty" name="difficulty" class="form-select" required>
+                            <option value="">Sélectionner une difficulté</option>
+                            {% for difficulty in difficulties %}
+                                <option value="{{ difficulty.id }}">{{ difficulty.name }} - {{ difficulty.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Nombre de joueurs -->
+                    <div class="form-group">
+                        <label for="player-count">Nombre de joueurs :</label>
+                        <select id="player-count" name="playerCount" class="form-select" required>
+                            {% for i in range(game.minPlayers ?? 1, game.maxPlayers ?? 4) %}
+                                <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }} joueur{{ i > 1 ? 's' : '' }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Durée estimée -->
+                    <div class="form-group">
+                        <label for="estimated-duration">Durée estimée (minutes) :</label>
+                        <input type="number" id="estimated-duration" name="estimatedDuration" 
+                               value="{{ game.defaultDurationMinutes ?? 30 }}" 
+                               min="5" max="180" class="form-input" required>
+                    </div>
+                </div>
+                
+                <!-- Participants -->
+                <div class="participants-section">
+                    <h3>Participants</h3>
+                    <div id="participants-list" class="participants-list">
+                        <!-- Les participants seront ajoutés dynamiquement -->
+                    </div>
+                    <button type="button" id="add-participant" class="btn btn-secondary">
+                        <i class="icon">➕</i>
+                        Ajouter un participant
+                    </button>
+                </div>
+                
+                <!-- Actions -->
+                <div class="form-actions">
+                    <button type="button" id="preview-rules" class="btn btn-secondary">
+                        <i class="icon">📋</i>
+                        Voir les règles
+                    </button>
+                    <button type="submit" id="start-game" class="btn btn-primary">
+                        <i class="icon">▶️</i>
+                        Commencer la partie
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Zone de jeu (sera affichée après le démarrage) -->
+<div id="game-zone" class="game-zone" style="display: none;">
+    <div class="container">
+        <div class="game-interface">
+            <!-- Header du jeu -->
+            <div class="game-header">
+                <div class="game-info">
+                    <h2 id="current-session-name">Session en cours</h2>
+                    <div class="game-timer">
+                        <span class="timer-label">Temps écoulé :</span>
+                        <span id="game-timer" class="timer-display">00:00:00</span>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button id="pause-game" class="btn btn-warning">
+                        <i class="icon">⏸️</i>
+                        Pause
+                    </button>
+                    <button id="stop-game" class="btn btn-danger">
+                        <i class="icon">⏹️</i>
+                        Arrêter
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Participants actifs -->
+            <div class="active-participants">
+                <h3>Participants actifs</h3>
+                <div id="participants-display" class="participants-grid">
+                    <!-- Les participants seront affichés ici -->
+                </div>
+            </div>
+            
+            <!-- Positions du jeu -->
+            {% if positions is defined and positions is not empty %}
+            <div class="game-positions">
+                <h3>Positions du jeu</h3>
+                <div class="positions-display">
+                    {% for position in positions %}
+                        <div class="position-item" data-position-id="{{ position.id }}">
+                            <div class="position-info">
+                                <h4>Position {{ position.positionNumber ?? loop.index }}</h4>
+                                <p>{{ position.positionName ?? 'Position ' ~ loop.index }}</p>
+                                {% if position.pointsValue ?? 0 > 0 %}
+                                    <span class="position-points">{{ position.pointsValue }} pts</span>
+                                {% endif %}
+                            </div>
+                            <div class="position-actions">
+                                <button class="btn btn-small position-btn" data-position="{{ position.id }}">
+                                    Sélectionner
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Notes du maître de jeu -->
+            <div class="game-notes">
+                <h3>Notes du maître de jeu</h3>
+                <textarea id="game-notes" placeholder="Ajoutez vos notes ici..." rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal des règles -->
+<div id="rules-modal" class="game-modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <div class="modal-header">
+            <h2>Règles du jeu : {{ game.name ?? 'Jeu' }}</h2>
+        </div>
+        <div class="modal-body">
+            <div class="rules-content">
+                <h3>Règles de base</h3>
+                <p>{{ game.baseRules ?? 'Règles du jeu à définir' }}</p>
+                
+                {% if positions is defined and positions is not empty %}
+                <h3>Positions</h3>
+                <ul>
+                    {% for position in positions %}
+                        <li>
+                            <strong>Position {{ position.positionNumber ?? loop.index }} :</strong> 
+                            {{ position.positionName ?? 'Position ' ~ loop.index }}
+                            {% if position.positionDescription %}
+                                - {{ position.positionDescription }}
+                            {% endif %}
+                            {% if position.pointsValue ?? 0 > 0 %}
+                                ({{ position.pointsValue }} points)
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary modal-close">Fermer</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

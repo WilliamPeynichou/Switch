@@ -6,12 +6,35 @@
             <nav>
                 <ul class="nav-menu">
                     <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                    <li><a href="#">Sports</a></li>
-                    <li><a href="#">Compétitions</a></li>
-                    <li><a href="#">À propos</a></li>
-                    <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
+            
+            <div class="nav-auth">
+                {% if app.user %}
+                    <div class="user-menu">
+                        <span class="user-greeting">Bonjour, {{ app.user.firstName ?? app.user.username }} !</span>
+                        <div class="user-dropdown">
+                            <a href="{{ path('app_profile') }}" class="dropdown-link">
+                                <i class="icon">👤</i>
+                                Mon profil
+                            </a>
+                            <a href="{{ path('app_statistics_index') }}" class="dropdown-link">
+                                <i class="icon">📊</i>
+                                Mes statistiques
+                            </a>
+                            <a href="{{ path('app_logout') }}" class="dropdown-link">
+                                <i class="icon">🚪</i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="auth-links">
+                        <a href="{{ path('app_login') }}" class="btn btn-outline">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="btn btn-primary">Inscription</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </header>

@@ -1,0 +1,7 @@
+# Configuration pour MAMP avec Symfony
+RewriteEngine On
+
+# Redirection vers index.php pour toutes les requêtes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

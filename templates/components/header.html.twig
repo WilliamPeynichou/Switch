@@ -5,9 +5,10 @@
             <a href="{{ path('app_home') }}" class="logo">SWITCH</a>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li><a href="{{ path('app_home') }}" class="nav-link">Accueil</a></li>
                     {% if app.user %}
-                        <li><a href="{{ path('app_statistics_index') }}">Statistiques</a></li>
+                        <li><a href="{{ path('app_statistics_index') }}" class="nav-link">Statistiques</a></li>
+                        <li><a href="{{ path('app_tour_du_monde') }}" class="nav-link">Tour du Monde</a></li>
                     {% endif %}
                 </ul>
             </nav>

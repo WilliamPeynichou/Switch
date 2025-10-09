@@ -71,6 +71,8 @@ class Game
     {
         $this->gamePositions = new ArrayCollection();
         $this->gameSessions = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

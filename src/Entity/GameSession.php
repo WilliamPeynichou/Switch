@@ -81,6 +81,7 @@ class GameSession
         $this->gameEvents = new ArrayCollection();
         $this->sessionNotes = new ArrayCollection();
         $this->gameStatistics = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

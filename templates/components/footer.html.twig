@@ -3,23 +3,28 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>Switch</h3>
-                <p>La plateforme sportive vintage qui révolutionne l'expérience compétitive.</p>
+                <h3>Switch Game</h3>
+                <p>L'expérience sportive futuriste qui vous transporte dans l'univers du basketball avec style et modernité.</p>
             </div>
+            
             <div class="footer-section">
                 <h3>Navigation</h3>
-                <p><a href="{{ path('app_home') }}">Accueil</a></p>
-                <p><a href="#">Sports</a></p>
-                <p><a href="#">Compétitions</a></p>
-                <p><a href="#">À propos</a></p>
+                <ul>
+                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li><a href="{{ path('app_tour_du_monde') }}">Tour du Monde</a></li>
+                    {% if app.user %}
+                        <li><a href="{{ path('app_statistics_index') }}">Statistiques</a></li>
+                        <li><a href="{{ path('app_tour_du_monde_history') }}">Historique</a></li>
+                    {% endif %}
+                </ul>
             </div>
+            
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>Email: contact@switch-game.com</p>
-                <p>Téléphone: +33 1 23 45 67 89</p>
-                <p>Adresse: Paris, France</p>
+                <p>Pour toute question ou suggestion, n'hésitez pas à nous contacter.</p>
             </div>
         </div>
+        
         <div class="footer-bottom">
             <p>&copy; 2024 Switch Game. Tous droits réservés.</p>
         </div>

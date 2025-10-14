@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Réponse à votre message - Switch Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #000; color: #fff; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .response-box { background: #fff; padding: 20px; border-left: 4px solid #000; margin: 20px 0; }
+        .footer { background: #000; color: #fff; padding: 20px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏀 Switch Game - Réponse à votre message</h1>
+        </div>
+        
+        <div class="content">
+            <p>Bonjour {{ contactMessage.name }},</p>
+            
+            <p>Merci pour votre message concernant : <strong>{{ contactMessage.subject }}</strong></p>
+            
+            <div class="response-box">
+                <h3>Notre réponse :</h3>
+                <p>{{ response|nl2br }}</p>
+            </div>
+            
+            <p>Si vous avez d'autres questions, n'hésitez pas à nous contacter à nouveau.</p>
+            
+            <p>Cordialement,<br>L'équipe Switch Game</p>
+        </div>
+        
+        <div class="footer">
+            <p>Switch Game - Plateforme sportive</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,119 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Switch Game - Plateforme Sportive Futuriste{% endblock %}
+{% block title %}Switch Game - Plateforme Sportive{% endblock %}
 
 {% block body %}
-<div class="home-page">
+<div class="game-history-page">
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Switch Game</h1>
-                <p class="hero-subtitle">L'expérience sportive futuriste qui révolutionne l'expérience compétitive</p>
-                <div class="hero-actions">
-                    <a href="{{ path('app_tour_du_monde') }}" class="btn btn-primary btn-lg">
-                        <i class="icon">🎮</i> Jouer au Tour du Monde
-                    </a>
-                    <a href="#games" class="btn btn-outline btn-lg">
-                        <i class="icon">📋</i> Voir tous les jeux
-                    </a>
-                </div>
-            </div>
+    <div class="history-header">
+        <h1>🏀 SWITCH GAME</h1>
+        <p>L'expérience sportive qui révolutionne l'expérience compétitive</p>
+        <div class="auth-links">
+            <a href="{{ path('app_tour_du_monde') }}" class="btn btn-primary">
+                🎮 Jouer au Tour du Monde
+            </a>
+            <a href="#games" class="btn btn-secondary">
+                📋 Voir tous les jeux
+            </a>
         </div>
-    </section>
+    </div>
 
     <!-- Games Section -->
-    <section id="games" class="main">
-        <div class="container">
-            <h2 class="text-center mb-8">🎮 Nos Jeux</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for game in games %}
-                    <div class="game-card scroll-reveal">
-                        <div class="game-card-header">
-                            <div class="game-card-icon">
-                                🏀
-                            </div>
-                            <div>
-                                <h3 class="game-card-title">{{ game.name }}</h3>
-                                <p class="game-card-subtitle">{{ game.gameType|default('Classique') }}</p>
-                            </div>
+    <div class="stats-section">
+        <h2>🎮 Nos Jeux</h2>
+        
+        <div class="rules-grid">
+            {% for game in games %}
+                <div class="rule-card">
+                    <h3>{{ game.name }}</h3>
+                    <p>{{ game.description|default('Un jeu de basketball passionnant avec des règles uniques.') }}</p>
+                    
+                    <div class="history-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Joueurs:</span>
+                            <span class="detail-value">{{ game.minPlayers|default(2) }}-{{ game.maxPlayers|default(8) }}</span>
                         </div>
-                        
-                        <div class="game-card-body">
-                            <p class="game-card-description">
-                                {{ game.description|default('Un jeu de basketball passionnant avec des règles uniques.') }}
-                            </p>
-                            
-                            <div class="game-card-stats">
-                                <div class="game-stat">
-                                    <div class="game-stat-value">{{ game.minPlayers|default(2) }}-{{ game.maxPlayers|default(8) }}</div>
-                                    <div class="game-stat-label">Joueurs</div>
-                                </div>
-                                <div class="game-stat">
-                                    <div class="game-stat-value">{{ game.defaultDurationMinutes|default(30) }}min</div>
-                                    <div class="game-stat-label">Durée</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="game-card-actions">
-                            <a href="{{ path('app_game_show', {id: game.id}) }}" class="btn btn-primary">
-                                <i class="icon">👁️</i> Détails
-                            </a>
-                            {% if game.name == 'Tour du Monde' %}
-                                <a href="{{ path('app_tour_du_monde') }}" class="btn btn-success">
-                                    <i class="icon">🎮</i> Jouer
-                                </a>
-                            {% else %}
-                                <button class="btn btn-secondary" disabled>
-                                    <i class="icon">⏳</i> Bientôt
-                                </button>
-                            {% endif %}
+                        <div class="detail-item">
+                            <span class="detail-label">Durée:</span>
+                            <span class="detail-value">{{ game.defaultDurationMinutes|default(30) }}min</span>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
+                    
+                    <div class="history-actions">
+                        <a href="{{ path('app_game_show', {id: game.id}) }}" class="btn btn-secondary">
+                            👁️ Détails
+                        </a>
+                        {% if game.name == 'Tour du Monde' %}
+                            <a href="{{ path('app_tour_du_monde') }}" class="btn btn-primary">
+                                🎮 Jouer
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary" disabled>
+                                ⏳ Bientôt
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
 
     <!-- Features Section -->
-    <section class="main bg-dark-light">
-        <div class="container">
-            <h2 class="text-center mb-8">✨ Fonctionnalités</h2>
+    <div class="history-section">
+        <h2>✨ Fonctionnalités</h2>
+        
+        <div class="rules-grid">
+            <div class="rule-card">
+                <h3>🎯 Jeux Personnalisés</h3>
+                <p>Créez vos propres règles et défis pour des parties uniques et mémorables.</p>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card text-center">
-                    <div class="card-header">
-                        <div class="text-4xl mb-4">🎯</div>
-                        <h3 class="card-title">Jeux Personnalisés</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Créez vos propres règles et défis pour des parties uniques et mémorables.</p>
-                    </div>
-                </div>
-                
-                <div class="card text-center">
-                    <div class="card-header">
-                        <div class="text-4xl mb-4">📊</div>
-                        <h3 class="card-title">Statistiques</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Suivez vos performances et progressez avec des statistiques détaillées.</p>
-                    </div>
-                </div>
-                
-                <div class="card text-center">
-                    <div class="card-header">
-                        <div class="text-4xl mb-4">👥</div>
-                        <h3 class="card-title">Multijoueur</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Jouez avec vos amis et organisez des tournois épiques.</p>
-                    </div>
-                </div>
+            <div class="rule-card">
+                <h3>📊 Statistiques</h3>
+                <p>Suivez vos performances et progressez avec des statistiques détaillées.</p>
+            </div>
+            
+            <div class="rule-card">
+                <h3>👥 Multijoueur</h3>
+                <p>Jouez avec vos amis et organisez des tournois épiques.</p>
             </div>
         </div>
-    </section>
+    </div>
 </div>
 {% endblock %}

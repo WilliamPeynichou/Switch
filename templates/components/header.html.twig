@@ -1,53 +1,43 @@
-<!-- Header Component -->
-<header class="header">
-    <div class="container">
-        <div class="header-content">
-            <a href="{{ path('app_home') }}" class="logo">SWITCH</a>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="{{ path('app_home') }}" class="nav-link">Accueil</a></li>
-                    {% if app.user %}
-                        <li><a href="{{ path('app_statistics_index') }}" class="nav-link">Statistiques</a></li>
-                        <li><a href="{{ path('app_tour_du_monde') }}" class="nav-link">Tour du Monde</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-            
-            <div class="nav-auth">
+<!-- Header Component - Sport Design -->
+<header>
+    <div class="navbar">
+        <!-- Logo -->
+        <a href="{{ path('app_home') }}" class="navbar-brand">
+            🏀 SWITCH GAME
+        </a>
+        
+        <!-- Navigation -->
+        <nav>
+            <ul class="navbar-nav">
+                <li><a href="{{ path('app_home') }}">Accueil</a></li>
                 {% if app.user %}
-                    <div class="user-menu">
-                        <span class="user-greeting">Bonjour, {{ app.user.firstName ?? app.user.username }} !</span>
-                        <div class="user-dropdown">
-                            <a href="{{ path('app_profile') }}" class="dropdown-link">
-                                <i class="icon">👤</i>
-                                Mon profil
-                            </a>
-                            <a href="{{ path('app_profile_edit') }}" class="dropdown-link">
-                                <i class="icon">⚙️</i>
-                                Modifier profil
-                            </a>
-                            <a href="{{ path('app_statistics_index') }}" class="dropdown-link">
-                                <i class="icon">📊</i>
-                                Mes statistiques
-                            </a>
-                            <a href="{{ path('app_tour_du_monde_history') }}" class="dropdown-link">
-                                <i class="icon">🎮</i>
-                                Historique Tour du Monde
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="{{ path('app_logout') }}" class="dropdown-link logout">
-                                <i class="icon">🚪</i>
-                                Déconnexion
-                            </a>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="auth-links">
-                        <a href="{{ path('app_login') }}" class="btn btn-outline">Connexion</a>
-                        <a href="{{ path('app_register') }}" class="btn btn-primary">Inscription</a>
-                    </div>
                 {% endif %}
-            </div>
+            </ul>
+        </nav>
+        
+        <!-- User Menu / Auth -->
+        <div class="nav-auth">
+            {% if app.user %}
+                <div class="user-menu">
+                    <button class="user-menu-toggle">
+                        <span>{{ app.user.firstName ?? app.user.username }}</span>
+                        <span>▼</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="{{ path('app_profile') }}">👤 Mon profil</a>
+                        <a href="{{ path('app_profile_edit') }}">⚙️ Modifier profil</a>
+                        <a href="{{ path('app_statistics_index') }}">📊 Mes statistiques</a>
+                        <a href="{{ path('app_tour_du_monde_history') }}">🎮 Historique Tour du Monde</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('app_logout') }}" class="logout">🚪 Déconnexion</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="auth-links">
+                    <a href="{{ path('app_login') }}" class="btn btn-secondary">Connexion</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-primary">Inscription</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </header>

@@ -3,162 +3,124 @@
 {% block title %}Statistiques - Switch Game{% endblock %}
 
 {% block body %}
-<div class="statistics-hero">
-    <div class="container">
-        <h1 class="page-title">
-            <span class="title-icon">📊</span>
-            Statistiques
-        </h1>
-        <p class="page-subtitle">Analysez vos performances et comparez-vous aux autres joueurs</p>
+<div class="game-history-page">
+    <!-- Hero Section -->
+    <div class="history-header">
+        <h1>📊 Mes Statistiques</h1>
+        <p>Suivez vos performances et progressez dans vos jeux</p>
     </div>
-</div>
 
-<div class="statistics-content">
-    <div class="container">
-        <!-- Statistiques globales -->
-        <div class="stats-overview">
-            <h2>Vue d'ensemble</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">🎮</div>
-                    <div class="stat-content">
-                        <h3>{{ totalGames }}</h3>
-                        <p>Jeux disponibles</p>
+    <!-- Stats Overview -->
+    <div class="stats-section">
+        <h2>📈 Vue d'ensemble</h2>
+        
+        <div class="rules-grid">
+            <div class="rule-card">
+                <h3>🎮 Parties Jouées</h3>
+                <div class="detail-value">{{ totalSessions }}</div>
+            </div>
+            
+            <div class="rule-card">
+                <h3>🏆 Points Totaux</h3>
+                <div class="detail-value">{{ totalPoints }}</div>
+            </div>
+            
+            <div class="rule-card">
+                <h3>📊 Score Moyen</h3>
+                <div class="detail-value">{{ averageScore|number_format(1) }}</div>
+            </div>
+            
+            <div class="rule-card">
+                <h3>🎯 Jeux Actifs</h3>
+                <div class="detail-value">{{ totalGames }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Stats -->
+    {% if userStats is not empty %}
+    <div class="history-section">
+        <h2>📋 Mes Performances</h2>
+        
+        <div class="history-list">
+            {% for stat in userStats %}
+            <div class="history-item">
+                <div class="history-header">
+                    <div class="history-title">
+                        <h3>Partie #{{ loop.index }}</h3>
+                    </div>
+                    <div class="history-date">
+                        {{ stat.createdAt|date('d/m/Y H:i') }}
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🏆</div>
-                    <div class="stat-content">
-                        <h3>{{ totalSessions }}</h3>
-                        <p>Sessions jouées</p>
+                
+                <div class="history-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Points:</span>
+                        <span class="detail-value">{{ stat.totalPoints }}</span>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-content">
-                        <h3>{{ totalPlayers }}</h3>
-                        <p>Joueurs actifs</p>
+                    <div class="detail-item">
+                        <span class="detail-label">Tirs tentés:</span>
+                        <span class="detail-value">{{ stat.shotsAttempted }}</span>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⭐</div>
-                    <div class="stat-content">
-                        <h3>{{ userStats|length }}</h3>
-                        <p>Mes statistiques</p>
+                    <div class="detail-item">
+                        <span class="detail-label">Tirs réussis:</span>
+                        <span class="detail-value">{{ stat.shotsMade }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Pourcentage:</span>
+                        <span class="detail-value">{{ stat.successRate|number_format(1) }}%</span>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-
-        <!-- Mes sessions récentes -->
-        <div class="my-sessions">
-            <h2>Mes sessions récentes</h2>
-            {% if userSessions %}
-                <div class="sessions-list">
-                    {% for session in userSessions|slice(0, 5) %}
-                    <div class="session-card">
-                        <div class="session-info">
-                            <h3>{{ session.sessionName }}</h3>
-                            <p class="session-game">{{ session.game.name }}</p>
-                            <p class="session-date">{{ session.createdAt|date('d/m/Y H:i') }}</p>
-                        </div>
-                        <div class="session-status">
-                            <span class="status-badge status-{{ session.status }}">
-                                {{ session.status|title }}
-                            </span>
-                        </div>
-                        <div class="session-actions">
-                            <a href="{{ path('app_session_show', {id: session.id}) }}" class="btn btn-sm btn-primary">
-                                Voir détails
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="text-center">
-                    <a href="{{ path('app_statistics_my_sessions') }}" class="btn btn-secondary">
-                        Voir toutes mes sessions
-                    </a>
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <div class="empty-icon">🎮</div>
-                    <h3>Aucune session</h3>
-                    <p>Commencez à jouer pour voir vos statistiques !</p>
-                    <a href="{{ path('app_home') }}" class="btn btn-primary">Découvrir les jeux</a>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Statistiques par jeu -->
-        <div class="game-stats">
-            <h2>Statistiques par jeu</h2>
-            <div class="game-stats-grid">
-                {% for gameId, stats in gameStats %}
-                <div class="game-stat-card">
-                    <div class="game-stat-header">
-                        <h3>{{ stats.game.name }}</h3>
-                        <span class="game-type">{{ stats.game.gameType|replace({'_': ' '})|title }}</span>
-                    </div>
-                    <div class="game-stat-content">
-                        <div class="stat-item">
-                            <span class="stat-label">Sessions</span>
-                            <span class="stat-value">{{ stats.sessionsCount }}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Score moyen</span>
-                            <span class="stat-value">{{ stats.avgScore|number_format(1) }}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Meilleur score</span>
-                            <span class="stat-value">{{ stats.bestScore }}</span>
-                        </div>
-                    </div>
-                    <div class="game-stat-actions">
-                        <a href="{{ path('app_statistics_by_game', {id: gameId}) }}" class="btn btn-sm btn-outline">
-                            Voir détails
-                        </a>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Top joueurs -->
-        <div class="leaderboard-preview">
-            <h2>Classement</h2>
-            <div class="leaderboard-content">
-                <div class="leaderboard-section">
-                    <h3>🏆 Meilleurs scores</h3>
-                    <div class="leaderboard-list">
-                        {% for stat in topPlayers|slice(0, 5) %}
-                        <div class="leaderboard-item">
-                            <span class="rank">{{ loop.index }}</span>
-                            <span class="player">{{ stat.player.playerName }}</span>
-                            <span class="score">{{ stat.totalPoints }}</span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="leaderboard-section">
-                    <h3>⚡ Plus actifs</h3>
-                    <div class="leaderboard-list">
-                        {% for stat in mostActivePlayers|slice(0, 5) %}
-                        <div class="leaderboard-item">
-                            <span class="rank">{{ loop.index }}</span>
-                            <span class="player">{{ stat.player.playerName }}</span>
-                            <span class="score">{{ stat.sessionCount }} sessions</span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div class="text-center">
-                <a href="{{ path('app_statistics_leaderboard') }}" class="btn btn-primary">
-                    Voir le classement complet
+    </div>
+    {% else %}
+    <div class="history-section">
+        <div class="empty-history">
+            <div class="empty-icon">📊</div>
+            <h3>Aucune statistique</h3>
+            <p>Commencez à jouer pour voir vos statistiques ici !</p>
+            <div class="auth-links">
+                <a href="{{ path('app_tour_du_monde') }}" class="btn btn-primary">
+                    🎮 Commencer à jouer
                 </a>
             </div>
         </div>
+    </div>
+    {% endif %}
+
+    <!-- Leaderboard -->
+    {% if leaderboard is not empty %}
+    <div class="history-section">
+        <h2>🏆 Classement</h2>
+        
+        <div class="history-list">
+            {% for player in leaderboard %}
+            <div class="history-item">
+                <div class="history-header">
+                    <div class="history-title">
+                        <h3>#{{ loop.index }} {{ player.username }}</h3>
+                    </div>
+                    <div class="winner-badge">
+                        {{ player.totalPoints }} points
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="history-actions">
+        <a href="{{ path('app_tour_du_monde') }}" class="btn btn-primary">
+            🎮 Nouvelle partie
+        </a>
+        <a href="{{ path('app_home') }}" class="btn btn-secondary">
+            🏠 Retour à l'accueil
+        </a>
     </div>
 </div>
 {% endblock %}

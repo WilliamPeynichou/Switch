@@ -2,71 +2,68 @@
 
 {% block title %}Inscription - Switch Game{% endblock %}
 
-{% block body_class %}auth-page{% endblock %}
-
 {% block body %}
-<div class="auth-page">
-    <div class="auth-container">
-        <div class="auth-header">
-            <h1 class="auth-logo">📝 Inscription</h1>
-            <p class="auth-subtitle">Créez votre compte Switch Game</p>
-        </div>
+<div class="game-history-page">
+    <div class="history-header">
+        <h1>📝 Inscription</h1>
+        <p>Créez votre compte Switch Game</p>
+    </div>
 
-        <div class="auth-body">
-            {{ form_start(registrationForm, {'attr': {'class': 'auth-form'}}) }}
-                <div class="auth-form-group">
-                    {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'auth-label'}}) }}
-                    {{ form_widget(registrationForm.email, {'attr': {'class': 'auth-input', 'placeholder': 'votre@email.com'}}) }}
-                    {{ form_errors(registrationForm.email) }}
-                </div>
-
-                <div class="auth-form-group">
-                    {{ form_label(registrationForm.username, null, {'label_attr': {'class': 'auth-label'}}) }}
-                    {{ form_widget(registrationForm.username, {'attr': {'class': 'auth-input', 'placeholder': 'Votre nom d\'utilisateur'}}) }}
-                    {{ form_errors(registrationForm.username) }}
-                </div>
-
-                <div class="auth-form-group">
-                    {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'auth-label'}}) }}
-                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'auth-input', 'placeholder': 'Votre prénom'}}) }}
-                    {{ form_errors(registrationForm.firstName) }}
-                </div>
-
-                <div class="auth-form-group">
-                    {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'auth-label'}}) }}
-                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'auth-input', 'placeholder': 'Votre nom'}}) }}
-                    {{ form_errors(registrationForm.lastName) }}
-                </div>
-
-                <div class="auth-form-group">
-                    {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'auth-label'}}) }}
-                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'auth-input', 'placeholder': 'Votre mot de passe'}}) }}
-                    {{ form_errors(registrationForm.plainPassword.first) }}
-                </div>
-
-                <div class="auth-form-group">
-                    {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'auth-label'}}) }}
-                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'auth-input', 'placeholder': 'Confirmez votre mot de passe'}}) }}
-                    {{ form_errors(registrationForm.plainPassword.second) }}
-                </div>
-
-                <div class="auth-checkbox-group">
-                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'auth-checkbox'}}) }}
-                    <label for="{{ registrationForm.agreeTerms.vars.id }}" class="auth-checkbox-label">
-                        J'accepte les <a href="#" class="auth-link">conditions d'utilisation</a>
-                    </label>
-                    {{ form_errors(registrationForm.agreeTerms) }}
-                </div>
-
-                <button type="submit" class="auth-btn auth-btn-primary">
-                    <i class="icon">🚀</i>
-                    Créer mon compte
-                </button>
-            {{ form_end(registrationForm) }}
-
-            <div class="auth-links">
-                <p>Déjà un compte ? <a href="{{ path('app_login') }}" class="auth-link">Se connecter</a></p>
+    <div class="stats-section">
+        {{ form_start(registrationForm) }}
+            <div class="input-group">
+                <label for="{{ registrationForm.email.vars.id }}">Email</label>
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.com'}}) }}
+                {{ form_errors(registrationForm.email) }}
             </div>
+
+            <div class="input-group">
+                <label for="{{ registrationForm.username.vars.id }}">Nom d'utilisateur</label>
+                {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom d\'utilisateur'}}) }}
+                {{ form_errors(registrationForm.username) }}
+            </div>
+
+            <div class="input-group">
+                <label for="{{ registrationForm.firstName.vars.id }}">Prénom</label>
+                {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'Votre prénom'}}) }}
+                {{ form_errors(registrationForm.firstName) }}
+            </div>
+
+            <div class="input-group">
+                <label for="{{ registrationForm.lastName.vars.id }}">Nom</label>
+                {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom'}}) }}
+                {{ form_errors(registrationForm.lastName) }}
+            </div>
+
+            <div class="input-group">
+                <label for="{{ registrationForm.plainPassword.first.vars.id }}">Mot de passe</label>
+                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Votre mot de passe'}}) }}
+                {{ form_errors(registrationForm.plainPassword.first) }}
+            </div>
+
+            <div class="input-group">
+                <label for="{{ registrationForm.plainPassword.second.vars.id }}">Confirmer le mot de passe</label>
+                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez votre mot de passe'}}) }}
+                {{ form_errors(registrationForm.plainPassword.second) }}
+            </div>
+
+            <div class="input-group">
+                {{ form_widget(registrationForm.agreeTerms) }}
+                <label for="{{ registrationForm.agreeTerms.vars.id }}">
+                    J'accepte les <a href="{{ path('app_cgu') }}" class="auth-link">conditions d'utilisation</a>
+                </label>
+                {{ form_errors(registrationForm.agreeTerms) }}
+            </div>
+
+            <div class="history-actions">
+                <button type="submit" class="btn btn-primary">
+                    🚀 Créer mon compte
+                </button>
+            </div>
+        {{ form_end(registrationForm) }}
+
+        <div class="auth-links">
+            <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
         </div>
     </div>
 </div>

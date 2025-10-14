@@ -1,14 +1,12 @@
-<!-- Footer Component -->
-<footer class="footer">
-    <div class="container">
+<!-- Footer Component - Sport Design -->
+<footer>
+    <div class="footer-content">
+        <h3>🏀 Switch Game</h3>
+        <p>L'expérience sportive qui révolutionne l'expérience compétitive</p>
+        
         <div class="footer-content">
             <div class="footer-section">
-                <h3>Switch Game</h3>
-                <p>L'expérience sportive futuriste qui vous transporte dans l'univers du basketball avec style et modernité.</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Navigation</h3>
+                <h4>Navigation</h4>
                 <ul>
                     <li><a href="{{ path('app_home') }}">Accueil</a></li>
                     <li><a href="{{ path('app_tour_du_monde') }}">Tour du Monde</a></li>
@@ -20,12 +18,23 @@
             </div>
             
             <div class="footer-section">
-                <h3>Contact</h3>
+                <h4>Informations Légales</h4>
+                <ul>
+                    <li><a href="{{ path('app_legal_cgu') }}">Conditions Générales d'Utilisation</a></li>
+                    <li><a href="{{ path('app_legal_privacy') }}">Politique de Confidentialité</a></li>
+                    <li><a href="{{ path('app_legal_cookies') }}">Politique des Cookies</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4><a href="{{ path('app_contact') }}" style="color: #fff; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#ccc'" onmouseout="this.style.color='#fff'">Contact</a></h4>
                 <p>Pour toute question ou suggestion, n'hésitez pas à nous contacter.</p>
+                <p><strong>Email :</strong> williampro1711@gmail.com</p>
+                <p><strong>Adresse :</strong> Paris, France</p>
             </div>
         </div>
         
-        <div class="footer-bottom">
+        <div class="footer-content">
             <p>&copy; 2024 Switch Game. Tous droits réservés.</p>
         </div>
     </div>

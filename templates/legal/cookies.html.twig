@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique des Cookies - Switch Game{% endblock %}
+
+{% block body %}
+<div class="legal-page">
+    <div class="container">
+        <div class="legal-content">
+            <h1>Politique des Cookies</h1>
+            <p class="legal-intro">Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+
+            <section class="legal-section">
+                <h2>1. Qu'est-ce qu'un cookie ?</h2>
+                <p>Un cookie est un petit fichier texte stocké sur votre ordinateur ou appareil mobile lorsque vous visitez notre site. Les cookies nous permettent de reconnaître votre navigateur et d'améliorer votre expérience utilisateur.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>2. Types de cookies utilisés</h2>
+                
+                <h3>2.1 Cookies essentiels</h3>
+                <p>Ces cookies sont nécessaires au fonctionnement du site :</p>
+                <ul>
+                    <li><strong>Cookies de session :</strong> maintiennent votre connexion</li>
+                    <li><strong>Cookies de sécurité :</strong> protègent contre les attaques CSRF</li>
+                    <li><strong>Cookies de préférences :</strong> mémorisent vos choix</li>
+                </ul>
+
+                <h3>2.2 Cookies analytiques</h3>
+                <p>Ces cookies nous aident à comprendre comment vous utilisez notre site :</p>
+                <ul>
+                    <li>Pages les plus visitées</li>
+                    <li>Temps passé sur le site</li>
+                    <li>Erreurs rencontrées</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2>3. Cookies spécifiques à Switch Game</h2>
+                <table class="cookies-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du cookie</th>
+                            <th>Type</th>
+                            <th>Durée</th>
+                            <th>Finalité</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PHPSESSID</td>
+                            <td>Essentiel</td>
+                            <td>Session</td>
+                            <td>Maintien de la session utilisateur</td>
+                        </tr>
+                        <tr>
+                            <td>switch_preferences</td>
+                            <td>Fonctionnel</td>
+                            <td>1 an</td>
+                            <td>Préférences utilisateur</td>
+                        </tr>
+                        <tr>
+                            <td>switch_analytics</td>
+                            <td>Analytique</td>
+                            <td>2 ans</td>
+                            <td>Statistiques d'utilisation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="legal-section">
+                <h2>4. Gestion des cookies</h2>
+                
+                <h3>4.1 Paramètres du navigateur</h3>
+                <p>Vous pouvez contrôler les cookies via les paramètres de votre navigateur :</p>
+                <ul>
+                    <li><strong>Chrome :</strong> Paramètres > Confidentialité et sécurité > Cookies</li>
+                    <li><strong>Firefox :</strong> Options > Vie privée et sécurité > Cookies</li>
+                    <li><strong>Safari :</strong> Préférences > Confidentialité > Cookies</li>
+                    <li><strong>Edge :</strong> Paramètres > Cookies et autorisations de site</li>
+                </ul>
+
+                <h3>4.2 Suppression des cookies</h3>
+                <p>Vous pouvez supprimer les cookies existants à tout moment. Notez que cela peut affecter le fonctionnement de certaines fonctionnalités du site.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>5. Cookies tiers</h2>
+                <p>Nous n'utilisons pas de cookies tiers pour le moment. Si cela change, nous mettrons à jour cette politique et vous en informerons.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>6. Consentement</h2>
+                <p>En continuant à utiliser notre site, vous consentez à l'utilisation de cookies conformément à cette politique. Vous pouvez retirer votre consentement à tout moment en modifiant les paramètres de votre navigateur.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>7. Contact</h2>
+                <p>Pour toute question sur notre utilisation des cookies :</p>
+                <ul>
+                    <li><strong>Email :</strong> cookies@switch-game.com</li>
+                    <li><strong>Adresse :</strong> Paris, France</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

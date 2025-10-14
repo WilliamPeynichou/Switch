@@ -2,55 +2,51 @@
 
 {% block title %}Connexion - Switch Game{% endblock %}
 
-{% block body_class %}auth-page{% endblock %}
-
 {% block body %}
-<div class="auth-page">
-    <div class="auth-container">
-        <div class="auth-header">
-            <h1 class="auth-logo">🔐 Connexion</h1>
-            <p class="auth-subtitle">Connectez-vous à votre compte Switch Game</p>
-        </div>
+<div class="game-history-page">
+    <div class="history-header">
+        <h1>🔐 Connexion</h1>
+        <p>Connectez-vous à votre compte Switch Game</p>
+    </div>
 
-        <div class="auth-body">
-            <form method="post" class="auth-form">
-                {% if error is defined and error %}
-                    <div class="auth-alert auth-alert-danger">
-                        <i class="icon">⚠️</i>
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
-                    </div>
-                {% endif %}
-
-                <div class="auth-form-group">
-                    <label for="inputEmail" class="auth-label">Email</label>
-                    <input type="email" value="{{ last_username ?? '' }}" name="_username" id="inputEmail" 
-                           class="auth-input" autocomplete="email" required autofocus
-                           placeholder="votre@email.com">
+    <div class="stats-section">
+        <form method="post">
+            {% if error is defined and error %}
+                <div class="flash-message flash-error">
+                    <span class="flash-icon">⚠️</span>
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
+            {% endif %}
 
-                <div class="auth-form-group">
-                    <label for="inputPassword" class="auth-label">Mot de passe</label>
-                    <input type="password" name="_password" id="inputPassword" 
-                           class="auth-input" autocomplete="current-password" required
-                           placeholder="Votre mot de passe">
-                </div>
-
-                <div class="auth-checkbox-group">
-                    <input type="checkbox" name="_remember_me" id="remember_me" class="auth-checkbox">
-                    <label for="remember_me" class="auth-checkbox-label">
-                        Se souvenir de moi
-                    </label>
-                </div>
-
-                <button type="submit" class="auth-btn auth-btn-primary">
-                    <i class="icon">🚀</i>
-                    Se connecter
-                </button>
-            </form>
-
-            <div class="auth-links">
-                <p>Pas encore de compte ? <a href="{{ path('app_register') }}" class="auth-link">Créer un compte</a></p>
+            <div class="input-group">
+                <input type="email" value="{{ last_username ?? '' }}" name="_username" id="inputEmail" 
+                       class="form-control" autocomplete="email" required autofocus
+                       placeholder="votre@email.com">
             </div>
+
+            <div class="input-group">
+                <input type="password" name="_password" id="inputPassword" 
+                       class="form-control" autocomplete="current-password" required
+                       placeholder="Votre mot de passe">
+            </div>
+
+            <div class="input-group">
+                <input type="checkbox" name="_remember_me" id="remember_me">
+                <label for="remember_me">
+                    Se souvenir de moi
+                </label>
+            </div>
+
+            <div class="history-actions">
+                <button type="submit" class="btn btn-primary">
+                    🚀 Se connecter
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-links">
+            <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Créer un compte</a></p>
+            <p><a href="{{ path('app_forgot_password') }}">Mot de passe oublié ?</a></p>
         </div>
     </div>
 </div>

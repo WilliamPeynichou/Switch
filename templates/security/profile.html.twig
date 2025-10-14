@@ -3,142 +3,84 @@
 {% block title %}Mon Profil - Switch Game{% endblock %}
 
 {% block body %}
-<div class="profile-hero">
-    <div class="container">
-        <div class="profile-header">
-            <div class="profile-avatar">
-                <div class="avatar-circle">
-                    <span class="avatar-text">{{ (app.user.firstName|first ~ app.user.lastName|first)|upper }}</span>
+<div class="game-history-page">
+    <!-- Hero Section -->
+    <div class="history-header">
+        <h1>👤 Mon Profil</h1>
+        <p>Gérez vos informations et suivez vos performances</p>
+    </div>
+
+    <!-- Profile Info -->
+    <div class="stats-section">
+        <h2>📋 Informations Personnelles</h2>
+        
+        <div class="history-item">
+            <div class="history-header">
+                <div class="history-title">
+                    <h3>{{ app.user.firstName }} {{ app.user.lastName }}</h3>
+                </div>
+                <div class="history-date">
+                    @{{ app.user.username }}
                 </div>
             </div>
-            <div class="profile-info">
-                <h1 class="profile-name">{{ app.user.firstName }} {{ app.user.lastName }}</h1>
-                <p class="profile-username">@{{ app.user.username }}</p>
-                <p class="profile-email">{{ app.user.email }}</p>
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">{{ app.user.gameSessions|length }}</span>
-                        <span class="stat-label">Sessions</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">{{ app.user.sessionParticipants|length }}</span>
-                        <span class="stat-label">Participations</span>
-                    </div>
+            
+            <div class="history-details">
+                <div class="detail-item">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">{{ app.user.email }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Membre depuis:</span>
+                    <span class="detail-value">{{ app.user.createdAt|date('d/m/Y') }}</span>
                 </div>
             </div>
-            <div class="profile-actions">
+            
+            <div class="history-actions">
                 <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">
-                    <i class="icon">✏️</i>
-                    Modifier le profil
+                    ✏️ Modifier le profil
                 </a>
             </div>
         </div>
     </div>
-</div>
 
-<div class="profile-content">
-    <div class="container">
-        <div class="profile-grid">
-            <div class="profile-section">
-                <h2 class="section-title">
-                    <i class="icon">📊</i>
-                    Mes Statistiques
-                </h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">🎮</div>
-                        <div class="stat-content">
-                            <h3>{{ app.user.gameSessions|length }}</h3>
-                            <p>Sessions créées</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-content">
-                            <h3>{{ app.user.sessionParticipants|length }}</h3>
-                            <p>Participations</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🏆</div>
-                        <div class="stat-content">
-                            <h3>0</h3>
-                            <p>Victoires</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">⭐</div>
-                        <div class="stat-content">
-                            <h3>0</h3>
-                            <p>Points totaux</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Statistics -->
+    <div class="history-section">
+        <h2>📊 Mes Statistiques</h2>
+        
+        <div class="rules-grid">
+            <div class="rule-card">
+                <h3>🎮 Sessions Créées</h3>
+                <div class="detail-value">{{ app.user.gameSessions|length }}</div>
             </div>
-
-            <div class="profile-section">
-                <h2 class="section-title">
-                    <i class="icon">🎯</i>
-                    Mes Sessions Récentes
-                </h2>
-                {% if app.user.gameSessions|length > 0 %}
-                    <div class="sessions-list">
-                        {% for session in app.user.gameSessions|slice(0, 5) %}
-                        <div class="session-card">
-                            <div class="session-info">
-                                <h3>{{ session.sessionName }}</h3>
-                                <p class="session-game">{{ session.game.name }}</p>
-                                <p class="session-date">{{ session.createdAt|date('d/m/Y H:i') }}</p>
-                            </div>
-                            <div class="session-status">
-                                <span class="status-badge status-{{ session.status }}">
-                                    {{ session.status|title }}
-                                </span>
-                            </div>
-                            <div class="session-actions">
-                                <a href="{{ path('app_session_show', {id: session.id}) }}" class="btn btn-sm btn-primary">
-                                    Voir détails
-                                </a>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="text-center">
-                        <a href="{{ path('app_statistics_my_sessions') }}" class="btn btn-secondary">
-                            Voir toutes mes sessions
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="empty-state">
-                        <div class="empty-icon">🎮</div>
-                        <h3>Aucune session</h3>
-                        <p>Commencez à jouer pour voir vos sessions !</p>
-                        <a href="{{ path('app_home') }}" class="btn btn-primary">Découvrir les jeux</a>
-                    </div>
-                {% endif %}
+            
+            <div class="rule-card">
+                <h3>👥 Participations</h3>
+                <div class="detail-value">{{ app.user.sessionParticipants|length }}</div>
+            </div>
+            
+            <div class="rule-card">
+                <h3>🏆 Victoires</h3>
+                <div class="detail-value">0</div>
+            </div>
+            
+            <div class="rule-card">
+                <h3>⭐ Points Totaux</h3>
+                <div class="detail-value">0</div>
             </div>
         </div>
+    </div>
 
-        <!-- Section de suppression du compte -->
-        <div class="profile-section">
-            <div class="section-header">
-                <h2>Zone dangereuse</h2>
-                <p>Actions irréversibles</p>
-            </div>
-            <div class="section-content">
-                <div class="danger-zone">
-                    <h3>Supprimer mon compte</h3>
-                    <p>Cette action est irréversible. Toutes vos données seront supprimées.</p>
-                    <form method="post" action="{{ path('app_profile_delete') }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete-profile') }}">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="icon">🗑️</i>
-                            Supprimer mon compte
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <!-- Actions -->
+    <div class="history-actions">
+        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">
+            ✏️ Modifier le profil
+        </a>
+        <a href="{{ path('app_statistics_index') }}" class="btn btn-secondary">
+            📊 Voir les statistiques
+        </a>
+        <a href="{{ path('app_home') }}" class="btn btn-secondary">
+            🏠 Retour à l'accueil
+        </a>
     </div>
 </div>
 {% endblock %}

@@ -3,44 +3,69 @@
 {% block title %}Tour du Monde - {{ parent() }}{% endblock %}
 
 {% block body %}
-<div class="tour-du-monde-page">
+<div class="game-history-page">
     <div class="container">
-        <!-- Hero Section -->
-        <div class="game-hero">
+        <!-- Header -->
+        <div class="history-header">
             <h1>🌍 Tour du Monde</h1>
-            <p class="game-description">
-                Le jeu de basketball le plus populaire ! Affrontez tous les adversaires 
-                pour devenir le champion du Tour du Monde.
-            </p>
+            <p>Le jeu de basketball le plus populaire ! Affrontez tous les adversaires pour devenir le champion du Tour du Monde.</p>
         </div>
 
         <!-- Rules Section -->
-        <div class="game-rules">
+        <div class="stats-section">
             <h2>📋 Règles du jeu</h2>
             <div class="rules-content">
-                <div class="rules-list">
-                    <h3>Objectif</h3>
-                    <p>Être le dernier joueur en lice en éliminant tous les adversaires.</p>
+                <div class="rules-grid">
+                    <div class="rule-card">
+                        <h3>🎯 Objectif</h3>
+                        <p>Être le dernier joueur en lice en éliminant tous les adversaires.</p>
+                    </div>
                     
-                    <h3>Déroulement</h3>
-                    <ul>
-                        <li>Chaque joueur tire depuis une position définie</li>
-                        <li>Si le tir est réussi, le joueur passe à la position suivante</li>
-                        <li>Si le tir échoue, le joueur reste à sa position</li>
-                        <li>Le premier à terminer le parcours gagne</li>
-                        <li>En cas d'égalité, un tirage au sort détermine le gagnant</li>
-                    </ul>
+                    <div class="rule-card">
+                        <h3>⚡ Déroulement</h3>
+                        <ul>
+                            <li>Chaque joueur tire depuis une position définie</li>
+                            <li>Si le tir est réussi, le joueur passe à la position suivante</li>
+                            <li>Si le tir échoue, le joueur reste à sa position</li>
+                            <li>Le premier à terminer le parcours gagne</li>
+                            <li>En cas d'égalité, un tirage au sort détermine le gagnant</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Règles spécifiques du Tour du Monde -->
+                <div class="specific-rules">
+                    <h3>🏀 Règles spécifiques du Tour du Monde</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card">
+                            <h3>🎯 Tir réussi</h3>
+                            <p>Si le ballon touche le panier → Avance d'une position</p>
+                        </div>
+                        <div class="rule-card">
+                            <h3>🏀 Brique (planche uniquement)</h3>
+                            <p>Si tu touches que la planche → Recule d'une position</p>
+                        </div>
+                        <div class="rule-card">
+                            <h3>💨 Airball</h3>
+                            <p>Si tu rates complètement → Retour au début</p>
+                        </div>
+                        <div class="rule-card">
+                            <h3>❌ Double airball</h3>
+                            <p>Si tu fais un airball au départ après y être revenu → Éliminé</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Game Setup -->
-        <div class="game-setup">
+        <div class="history-section">
             <h2>⚙️ Configuration du jeu</h2>
             
             {% if not user %}
-                <div class="alert alert-warning">
-                    <h3>🔒 Connexion requise</h3>
+                <div class="empty-history">
+                    <div class="empty-icon">🔒</div>
+                    <h3>Connexion requise</h3>
                     <p>Vous devez être connecté pour jouer au Tour du Monde.</p>
                     <div class="auth-links">
                         <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
@@ -48,109 +73,150 @@
                     </div>
                 </div>
             {% else %}
-                <form method="POST" action="{{ path('app_tour_du_monde_setup') }}" class="setup-form">
-                    <div class="form-group">
-                        <label for="difficulty">Niveau de difficulté</label>
-                        <select id="difficulty" name="difficulty" class="form-control">
-                            <option value="">Sélectionner une difficulté</option>
-                            {% for difficulty in difficulties %}
-                                <option value="{{ difficulty.id }}">{{ difficulty.name }} - {{ difficulty.description }}</option>
-                            {% endfor %}
-                        </select>
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-title">
+                            <h3>Configuration de la session</h3>
+                            <span class="history-date">Paramètres du jeu</span>
+                        </div>
                     </div>
+                    
+                    <div class="history-details">
+                        <form method="POST" action="{{ path('app_tour_du_monde_setup') }}" class="setup-form">
+                            <div class="detail-item">
+                                <span class="detail-label">Niveau de difficulté:</span>
+                                <select id="difficulty" name="difficulty" class="form-control">
+                                    <option value="">Sélectionner une difficulté</option>
+                                    {% for difficulty in difficulties %}
+                                        <option value="{{ difficulty.id }}">{{ difficulty.name }} - {{ difficulty.description }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="sessionName">Nom de la session</label>
-                        <input type="text" id="sessionName" name="sessionName" class="form-control" 
-                               placeholder="Ex: Tour du Monde - 08/10/2024" 
-                               value="Tour du Monde - {{ 'now'|date('d/m/Y H:i') }}" required>
-                    </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Nom de la session:</span>
+                                <input type="text" id="sessionName" name="sessionName" class="form-control" 
+                                       placeholder="Ex: Tour du Monde - 08/10/2024" 
+                                       value="Tour du Monde - {{ 'now'|date('d/m/Y H:i') }}" required>
+                            </div>
 
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="icon">⚙️</i> Configurer la session
-                        </button>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="icon">⚙️</i> Configurer la session
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             {% endif %}
         </div>
 
         {% if user %}
         <!-- Participants Management -->
-        <div class="participants-management">
+        <div class="history-section">
             <h2>👥 Gestion des participants</h2>
             
             {% if session %}
-            <div class="session-info">
-                <p><strong>Session:</strong> {{ session.sessionName }}</p>
-                <p><strong>Statut:</strong> {{ session.status }}</p>
-                <p><strong>Participants:</strong> {{ participants|length }}</p>
+            <div class="history-item">
+                <div class="history-header">
+                    <div class="history-title">
+                        <h3>Session active</h3>
+                        <span class="history-date">{{ session.sessionName }}</span>
+                    </div>
+                    <div class="history-status">
+                        <span class="winner-badge">📊 {{ participants|length }} participants</span>
+                    </div>
+                </div>
+                
+                <div class="history-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Statut:</span>
+                        <span class="detail-value">{{ session.status }}</span>
+                    </div>
+                </div>
             </div>
             {% endif %}
             
             <!-- Add Participant Form -->
-            <form method="POST" action="{{ path('app_tour_du_monde_add_participant') }}" class="add-participant-form">
-                <div class="form-group">
-                    <label for="playerName">Nom du joueur</label>
-                    <div class="input-group">
-                        <input type="text" id="playerName" name="playerName" class="form-control" 
-                               placeholder="Entrez le nom du joueur" required>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="icon">➕</i> Ajouter
-                        </button>
+            <div class="history-item">
+                <div class="history-header">
+                    <div class="history-title">
+                        <h3>Ajouter un participant</h3>
+                        <span class="history-date">Nouveau joueur</span>
                     </div>
                 </div>
-            </form>
-
-                <!-- Participants List -->
-                <div class="participants-list">
-                    {% if participants|length > 0 %}
-                        {% for participant in participants %}
-                            <div class="participant-item">
-                                <div class="participant-info">
-                                    <span class="participant-number">{{ participant.playerNumber }}</span>
-                                    <span class="participant-name">{{ participant.playerName }}</span>
-                                </div>
-                                <form method="POST" action="{{ path('app_tour_du_monde_remove_participant', {id: participant.id}) }}" 
-                                      style="display: inline;" onsubmit="return confirm('Supprimer ce participant ?')">
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="icon">❌</i>
-                                    </button>
-                                </form>
+                
+                <div class="history-details">
+                    <form method="POST" action="{{ path('app_tour_du_monde_add_participant') }}" class="add-participant-form">
+                        <div class="detail-item">
+                            <span class="detail-label">Nom du joueur:</span>
+                            <div class="input-group">
+                                <input type="text" id="playerName" name="playerName" class="form-control" 
+                                       placeholder="Entrez le nom du joueur" required>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="icon">➕</i> Ajouter
+                                </button>
                             </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="empty-state">
-                            <div class="empty-icon">👥</div>
-                            <p>Aucun participant ajouté</p>
-                            <p>Ajoutez des joueurs pour commencer le jeu</p>
                         </div>
-                    {% endif %}
+                    </form>
                 </div>
             </div>
 
-            <!-- Game Actions -->
-            <div class="game-actions">
-                {% if participants|length >= 2 %}
-                    <a href="{{ path('app_tour_du_monde_game') }}" class="btn btn-success btn-large">
-                        <i class="icon">🚀</i> Commencer le jeu ({{ participants|length }} joueurs)
-                    </a>
+            <!-- Participants List -->
+            <div class="history-list">
+                {% if participants|length > 0 %}
+                    {% for participant in participants %}
+                        <div class="history-item">
+                            <div class="history-header">
+                                <div class="history-title">
+                                    <h3>{{ participant.playerName }}</h3>
+                                    <span class="history-date">Joueur #{{ participant.playerNumber }}</span>
+                                </div>
+                                <div class="history-status">
+                                    <form method="POST" action="{{ path('app_tour_du_monde_remove_participant', {id: participant.id}) }}" 
+                                          style="display: inline;" onsubmit="return confirm('Supprimer ce participant ?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="icon">❌</i> Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 {% else %}
-                    <button class="btn btn-success btn-large" disabled>
-                        <i class="icon">⏳</i> Ajoutez au moins 2 joueurs
-                    </button>
+                    <div class="empty-history">
+                        <div class="empty-icon">👥</div>
+                        <h3>Aucun participant ajouté</h3>
+                        <p>Ajoutez des joueurs pour commencer le jeu</p>
+                    </div>
                 {% endif %}
-                
-                <!-- Reset Button -->
-                <form method="POST" action="{{ path('app_tour_du_monde_reset') }}" style="display: inline; margin-left: 10px;">
-                    <button type="submit" class="btn btn-warning" 
-                            onclick="return confirm('Êtes-vous sûr de vouloir réinitialiser complètement le jeu ? Tous les participants seront supprimés.')">
-                        <i class="icon">🔄</i> Réinitialiser
-                    </button>
-                </form>
             </div>
+        </div>
+
+        <!-- Game Actions -->
+        <div class="history-actions">
+            {% if participants|length >= 2 %}
+                <a href="{{ path('app_tour_du_monde_game') }}" class="btn btn-primary">
+                    <i class="icon">🚀</i> Commencer le jeu ({{ participants|length }} joueurs)
+                </a>
+            {% else %}
+                <button class="btn btn-primary" disabled>
+                    <i class="icon">⏳</i> Ajoutez au moins 2 joueurs
+                </button>
+            {% endif %}
+            
+            <!-- Reset Button -->
+            <form method="POST" action="{{ path('app_tour_du_monde_reset') }}" style="display: inline; margin-left: 10px;">
+                <button type="submit" class="btn btn-secondary" 
+                        onclick="return confirm('Êtes-vous sûr de vouloir réinitialiser complètement le jeu ? Tous les participants seront supprimés.')">
+                    <i class="icon">🔄</i> Réinitialiser
+                </button>
+            </form>
         </div>
         {% endif %}
     </div>
 </div>
+
+<!-- Game JavaScript -->
+<script src="{{ asset('js/game.js') }}?v={{ 'now'|date('U') }}"></script>
 {% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - Switch Game{% endblock %}
+
+{% block body %}
+<div class="game-history-page">
+    <!-- Hero Section -->
+    <div class="history-header">
+        <h1>📧 Contact</h1>
+        <p>Une question ? Une suggestion ? Contactez-nous !</p>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="stats-section">
+        <h2>💬 Envoyez-nous un message</h2>
+        
+        <form method="POST" class="contact-form">
+            <div class="input-group">
+                <label for="name">Nom complet *</label>
+                <input type="text" name="name" id="name" class="form-control" required
+                       placeholder="Votre nom complet" value="{{ app.user ? app.user.firstName ~ ' ' ~ app.user.lastName : '' }}">
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email *</label>
+                <input type="email" name="email" id="email" class="form-control" required
+                       placeholder="votre@email.com" value="{{ app.user ? app.user.email : '' }}">
+            </div>
+
+            <div class="input-group">
+                <label for="subject">Sujet *</label>
+                <input type="text" name="subject" id="subject" class="form-control" required
+                       placeholder="Sujet de votre message">
+            </div>
+
+            <div class="input-group">
+                <label for="message">Message *</label>
+                <textarea name="message" id="message" class="form-control" rows="6" required
+                          placeholder="Décrivez votre question ou suggestion..."></textarea>
+            </div>
+
+            <div class="history-actions">
+                <button type="submit" class="btn btn-primary">
+                    📤 Envoyer le message
+                </button>
+                <a href="{{ path('app_home') }}" class="btn btn-secondary">
+                    🏠 Retour à l'accueil
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="history-section">
+        <h2>📞 Autres moyens de contact</h2>
+        
+        <div class="rules-grid">
+            <div class="rule-card">
+                <h3>📧 Email</h3>
+                <p>williampro1711@gmail.com</p>
+                <p>Réponse sous 24h</p>
+            </div>
+            
+            <div class="rule-card">
+                <h3>📍 Adresse</h3>
+                <p>Paris, France</p>
+                <p>Support local</p>
+            </div>
+            
+            <div class="rule-card">
+                <h3>⏰ Horaires</h3>
+                <p>Lundi - Vendredi</p>
+                <p>9h00 - 18h00</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

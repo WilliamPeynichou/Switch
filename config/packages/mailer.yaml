@@ -1,3 +1,5 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        dsn: 'smtp://williampro1711@gmail.com:your_app_password@smtp.gmail.com:587'
+        # Pour Gmail, vous devez utiliser un "App Password" au lieu de votre mot de passe normal
+        # Allez dans Google Account > Security > 2-Step Verification > App passwords

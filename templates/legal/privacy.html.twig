@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité - Switch Game{% endblock %}
+
+{% block body %}
+<div class="legal-page">
+    <div class="container">
+        <div class="legal-content">
+            <h1>Politique de Confidentialité</h1>
+            <p class="legal-intro">Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+
+            <section class="legal-section">
+                <h2>1. Collecte des données</h2>
+                <p>Switch Game collecte les données suivantes :</p>
+                <ul>
+                    <li><strong>Données d'identification :</strong> nom, prénom, email, nom d'utilisateur</li>
+                    <li><strong>Données de jeu :</strong> statistiques, historique des parties, scores</li>
+                    <li><strong>Données techniques :</strong> adresse IP, type de navigateur, pages visitées</li>
+                    <li><strong>Cookies :</strong> cookies de session et de préférences</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2>2. Utilisation des données</h2>
+                <p>Vos données sont utilisées pour :</p>
+                <ul>
+                    <li>Fournir et améliorer nos services</li>
+                    <li>Personnaliser votre expérience de jeu</li>
+                    <li>Communiquer avec vous sur les mises à jour</li>
+                    <li>Analyser l'utilisation de la plateforme</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2>3. Partage des données</h2>
+                <p>Nous ne vendons pas vos données personnelles. Elles peuvent être partagées uniquement :</p>
+                <ul>
+                    <li>Avec votre consentement explicite</li>
+                    <li>Pour respecter une obligation légale</li>
+                    <li>Avec nos prestataires techniques (hébergement sécurisé)</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2>4. Sécurité</h2>
+                <p>Nous mettons en place des mesures de sécurité appropriées :</p>
+                <ul>
+                    <li>Chiffrement des données sensibles</li>
+                    <li>Accès restreint aux données personnelles</li>
+                    <li>Surveillance des accès</li>
+                    <li>Sauvegardes régulières et sécurisées</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2>5. Vos droits</h2>
+                <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+                <ul>
+                    <li><strong>Droit d'accès :</strong> consulter vos données</li>
+                    <li><strong>Droit de rectification :</strong> corriger vos données</li>
+                    <li><strong>Droit d'effacement :</strong> supprimer vos données</li>
+                    <li><strong>Droit à la portabilité :</strong> récupérer vos données</li>
+                    <li><strong>Droit d'opposition :</strong> vous opposer au traitement</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2>6. Cookies</h2>
+                <p>Nous utilisons des cookies pour :</p>
+                <ul>
+                    <li>Maintenir votre session de connexion</li>
+                    <li>Mémoriser vos préférences</li>
+                    <li>Analyser l'utilisation du site</li>
+                </ul>
+                <p>Vous pouvez désactiver les cookies dans les paramètres de votre navigateur.</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>7. Contact</h2>
+                <p>Pour exercer vos droits ou toute question sur vos données :</p>
+                <ul>
+                    <li><strong>Email :</strong> privacy@switch-game.com</li>
+                    <li><strong>Adresse :</strong> Paris, France</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

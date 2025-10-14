@@ -1,0 +1,205 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - Messages de contact{% endblock %}
+
+{% block body %}
+<div class="game-history-page">
+    <!-- Hero Section -->
+    <div class="history-header">
+        <h1>📧 Administration - Messages de contact</h1>
+        <p>Gérez les messages reçus et répondez aux utilisateurs</p>
+    </div>
+
+    <!-- Messages List -->
+    <div class="stats-section">
+        <h2>📋 Messages reçus</h2>
+        
+        {% if messages is empty %}
+            <div class="empty-history">
+                <div class="empty-icon">📭</div>
+                <h3>Aucun message</h3>
+                <p>Aucun message de contact reçu pour le moment.</p>
+            </div>
+        {% else %}
+            <div class="history-list">
+                {% for message in messages %}
+                <div class="history-item {{ message.isRead ? '' : 'unread' }}">
+                    <div class="history-header">
+                        <div class="history-title">
+                            <h3>{{ message.subject }}</h3>
+                            <p><strong>De :</strong> {{ message.name }} ({{ message.email }})</p>
+                        </div>
+                        <div class="history-date">
+                            {{ message.createdAt|date('d/m/Y H:i') }}
+                            {% if not message.isRead %}
+                                <span class="unread-badge">Nouveau</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="history-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Message :</span>
+                            <span class="detail-value">{{ message.message|slice(0, 100) }}{% if message.message|length > 100 %}...{% endif %}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="history-actions">
+                        <button class="btn btn-primary" onclick="showMessage({{ message.id }}, '{{ message.name }}', '{{ message.email }}', '{{ message.subject }}', '{{ message.message|e('js') }}')">
+                            👁️ Voir le message
+                        </button>
+                        {% if not message.isRead %}
+                            <form method="POST" action="{{ path('app_contact_response', {id: message.id}) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-secondary">
+                                    ✅ Marquer comme lu
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Actions -->
+    <div class="history-actions">
+        <a href="{{ path('app_home') }}" class="btn btn-secondary">
+            🏠 Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<!-- Modal pour afficher et répondre au message -->
+<div id="messageModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Message de contact</h3>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="message-info">
+                <p><strong>De :</strong> <span id="modalSender"></span></p>
+                <p><strong>Email :</strong> <span id="modalEmail"></span></p>
+                <p><strong>Sujet :</strong> <span id="modalSubject"></span></p>
+            </div>
+            <div class="message-content">
+                <h4>Message :</h4>
+                <p id="modalMessage"></p>
+            </div>
+            <form id="responseForm" method="POST">
+                <div class="input-group">
+                    <label for="response">Votre réponse :</label>
+                    <textarea name="response" id="response" class="form-control" rows="6" required
+                              placeholder="Tapez votre réponse ici..."></textarea>
+                </div>
+                <div class="history-actions">
+                    <button type="submit" class="btn btn-primary">
+                        📤 Envoyer la réponse
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        ❌ Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal {
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 0;
+    border: 2px solid #000;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.message-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.message-content {
+    margin-bottom: 30px;
+}
+
+.unread {
+    border-left: 4px solid #000;
+    background: #f8f9fa;
+}
+
+.unread-badge {
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.close {
+    color: #fff;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    opacity: 0.7;
+}
+</style>
+
+<script>
+function showMessage(id, name, email, subject, message) {
+    document.getElementById('modalTitle').textContent = subject;
+    document.getElementById('modalSender').textContent = name;
+    document.getElementById('modalEmail').textContent = email;
+    document.getElementById('modalSubject').textContent = subject;
+    document.getElementById('modalMessage').textContent = message;
+    document.getElementById('responseForm').action = '/contact/response/' + id;
+    document.getElementById('messageModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('messageModal').style.display = 'none';
+}
+
+// Fermer la modal en cliquant à l'extérieur
+window.onclick = function(event) {
+    const modal = document.getElementById('messageModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+</script>
+{% endblock %}
